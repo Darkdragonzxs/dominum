@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Games — Dominum Proxy</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script defer src="assets/js/main.js"></script>
+  </head>
+  <body class="page-games">
+    <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Global left sidebar -->
+    <aside class="left-sidebar">
+      <div class="sidebar-top">
+        <div class="logo">DP</div>
+        <nav class="side-icons">
+          <a title="Home" href="index.html">🏠</a>
+          <a title="Games" href="games.html" class="active">🎮</a>
+          <a title="Apps" href="apps.html">▦</a>
+          <a title="Extras" href="extras.html">＋</a>
+          <a title="Settings" href="settings.html">⚙️</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="clock" id="sidebarClock">--:--</div>
+        <div class="date muted" id="sidebarDate">—</div>
+        <div class="battery">🔋 100%</div>
+      </div>
+    </aside>
+
+    <main class="home-stage">
+      <div class="stage-inner">
+        <h1 class="page-heading neon-title">games</h1>
+        <div class="search-wrap glass small">
+          <div class="search-icon">🔎</div>
+          <input class="search-input" placeholder="search games..." aria-label="search games" />
+        </div>
+
+        <section class="grid grid-3 cards-grid">
+          <article class="card glass">
+            <div class="card-media placeholder game-1">🕹️</div>
+            <h3>Space Runner</h3>
+            <p class="muted">Fast-paced endless runner with retro vibes.</p>
+          </article>
+          <article class="card glass">
+            <div class="card-media placeholder game-2">🏎️</div>
+            <h3>Racers</h3>
+            <p class="muted">Simple multiplayer racing — competitive and fun.</p>
+          </article>
+          <article class="card glass">
+            <div class="card-media placeholder game-3">🧠</div>
+            <h3>Brain Blocks</h3>
+            <p class="muted">Puzzle game to challenge your logic.</p>
+          </article>
+          <!-- additional placeholder cards for layout -->
+          <article class="card glass"><div class="card-media placeholder">🎯</div><h3>Target Hit</h3><p class="muted">Arcade target shooter.</p></article>
+          <article class="card glass"><div class="card-media placeholder">🧩</div><h3>Puzzle Mix</h3><p class="muted">Challenging puzzles.</p></article>
+          <article class="card glass"><div class="card-media placeholder">🛸</div><h3>Astro Dash</h3><p class="muted">Space arcade runner.</p></article>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year2"></span> Dominum Proxy</span>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="apps.html">Apps</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

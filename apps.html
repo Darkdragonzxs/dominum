@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Apps — Dominum Proxy</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script defer src="assets/js/main.js"></script>
+  </head>
+  <body class="page-apps">
+    <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+    <aside class="left-sidebar">
+      <div class="sidebar-top">
+        <div class="logo">DP</div>
+        <nav class="side-icons">
+          <a title="Home" href="index.html">🏠</a>
+          <a title="Games" href="games.html">🎮</a>
+          <a title="Apps" href="apps.html" class="active">▦</a>
+          <a title="Extras" href="extras.html">＋</a>
+          <a title="Settings" href="settings.html">⚙️</a>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="clock" id="sidebarClock">--:--</div>
+        <div class="date muted" id="sidebarDate">—</div>
+        <div class="battery">🔋 100%</div>
+      </div>
+    </aside>
+
+    <main class="home-stage">
+      <div class="stage-inner">
+        <h1 class="page-heading neon-title">apps</h1>
+        <div class="search-wrap glass small">
+          <div class="search-icon">🔎</div>
+          <input class="search-input" placeholder="search apps..." aria-label="search apps" />
+        </div>
+
+        <section class="grid grid-3 cards-grid">
+          <article class="card glass"><div class="card-media placeholder app-1">📧</div><h3>Mail</h3><p class="muted">Webmail</p></article>
+          <article class="card glass"><div class="card-media placeholder app-2">📚</div><h3>Docs</h3><p class="muted">Cloud editor</p></article>
+          <article class="card glass"><div class="card-media placeholder app-3">�</div><h3>Chat</h3><p class="muted">Study groups</p></article>
+          <article class="card glass"><div class="card-media placeholder app-4">▶️</div><h3>Stream</h3><p class="muted">Video platforms</p></article>
+          <article class="card glass"><div class="card-media placeholder app-5">🎮</div><h3>Cloud Play</h3><p class="muted">Cloud gaming</p></article>
+          <article class="card glass"><div class="card-media placeholder app-6">🌐</div><h3>Browser</h3><p class="muted">Open links</p></article>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year3"></span> Dominum Proxy</span>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="games.html">Games</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

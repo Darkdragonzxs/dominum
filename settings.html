@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Settings — Dominum Proxy</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script defer src="assets/js/main.js"></script>
+  </head>
+  <body class="page-settings">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">Dominum Proxy</a>
+        <nav class="nav" id="mainNav">
+          <a href="games.html">Games</a>
+          <a href="apps.html">Apps</a>
+          <a href="extras.html">Extras</a>
+          <a href="settings.html" class="active">Settings</a>
+          <a href="credits.html">Credits</a>
+        </nav>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </header>
+
+    <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+    <aside class="left-sidebar">
+      <div class="sidebar-top">
+        <div class="logo">DP</div>
+        <nav class="side-icons">
+          <a title="Home" href="index.html">🏠</a>
+          <a title="Games" href="games.html">🎮</a>
+          <a title="Apps" href="apps.html">▦</a>
+          <a title="Extras" href="extras.html">＋</a>
+          <a title="Settings" href="settings.html" class="active">⚙️</a>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="clock" id="sidebarClock">--:--</div>
+        <div class="date muted" id="sidebarDate">—</div>
+        <div class="battery">🔋 100%</div>
+      </div>
+    </aside>
+
+    <main class="home-stage">
+      <div class="stage-inner">
+        <h1 class="page-heading neon-title">settings</h1>
+        <p class="muted">Client-side UI settings. These store preferences locally only.</p>
+
+        <div class="settings-grid">
+          <div class="setting card glass">
+            <h3>Theme</h3>
+            <p>Switch between light and dark themes.</p>
+            <div class="switch">
+              <label class="toggle">
+                <input id="toggleDark" type="checkbox" />
+                <span class="slider"></span>
+              </label>
+              <span class="switch-label">Dark mode</span>
+            </div>
+          </div>
+
+          <div class="setting card glass">
+            <h3>Animations</h3>
+            <p>Enable/disable UI animations for performance.</p>
+            <div class="switch">
+              <label class="toggle">
+                <input id="toggleAnim" type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
+              <span class="switch-label">Smooth animations</span>
+            </div>
+          </div>
+
+          <div class="setting card glass">
+            <h3>Particles</h3>
+            <p>Enable or disable the animated particle background.</p>
+            <div class="switch">
+              <label class="toggle">
+                <input id="toggleParticles" type="checkbox" />
+                <span class="slider"></span>
+              </label>
+              <span class="switch-label">Enable Particles</span>
+            </div>
+          </div>
+
+          <div class="setting card glass">
+            <h3>Font size</h3>
+            <p>Increase or decrease base font size for accessibility.</p>
+            <div class="font-size-controls">
+              <button class="btn sm" id="decFont">A-</button>
+              <button class="btn sm" id="resetFont">A</button>
+              <button class="btn sm" id="incFont">A+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year4"></span> Dominum Proxy</span>
+      </div>
+    </footer>
+  </body>
+</html>
