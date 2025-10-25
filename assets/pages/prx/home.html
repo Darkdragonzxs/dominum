@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #0d0d10;
+    --accent: #7a5cff;
+    --text: #e6e6ff;
+    --input-bg: #1b1b22;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  .logo {
+    margin-bottom: 30px;
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--accent);
+    text-shadow: 0 0 12px rgba(122,92,255,0.6);
+  }
+
+  .search-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .search-container input {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: none;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .search-container input:focus {
+    box-shadow: 0 0 0 3px rgba(122,92,255,0.4);
+  }
+
+  .search-container button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .search-container button:hover {
+    transform: translateY(-50%) scale(1.2);
+  }
+
+  .quick-links {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .quick-links a {
+    padding: 10px 16px;
+    background: var(--input-bg);
+    border-radius: 12px;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .quick-links a:hover {
+    background: var(--accent);
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+
+<div class="logo">Dominum</div>
+
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Search the web...">
+  <button id="searchBtn">🔍</button>
+</div>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+
+function performSearch() {
+  const query = searchInput.value.trim();
+  if (!query) return;
+  const url = query.includes('.') ? `https://${query}` : `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
+  window.location.href = `/s/embed.html#${url}`;
+}
+
+searchBtn.addEventListener('click', performSearch);
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') performSearch();
+});
+</script>
+
+</body>
+</html>
