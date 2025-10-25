@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dominum Games</title>
+<style>
+  /* games are by gn-math and truffled */
+  /* truffled.lol and gn-math.dev */
+  :root {
+    --primary: #6f42c1;
+    --primary-hover: #5936a6;
+    --accent: #f6c90e;
+    --text: #e6e6fa;
+    --bg: #1a1030;
+    --border: #3b2a65;
+    --radius: 12px;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  #searchBar {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.875rem 1rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+  }
+
+  #searchBar:focus {
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(252, 38, 81, 0.25), var(--shadow);
+    transform: translateY(-1px);
+    color: var(--bg);
+  }
+
+  #container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .zone-item {
+    background: #251841;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .zone-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+  }
+  .zone-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+  .zone-item button {
+    padding: 0.75rem;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+
+#fullscreenOverlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: none;
+  flex-direction: column;
+  z-index: 2000;
+  flex: 1;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+#fullscreenHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+}
+#fullscreenHeader h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+#fullscreenHeader span {
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+#closeFullscreen {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#zoneFullscreenFrame {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+</style>
+</head>
+<body>
+<input type="text" id="searchBar" placeholder="Search zones..." oninput="filterZones()">
+
+<div id="container">Loading...</div>
+
+<div id="fullscreenOverlay">
+  <div id="fullscreenHeader">
+    <div>
+      <h2 id="gameTitle">Game Title</h2>
+    </div>
+    <button id="closeFullscreen" title="Close">&times;</button>
+  </div>
+  <iframe id="zoneFullscreenFrame"></iframe>
+</div>
+
+<script>
+const container = document.getElementById('container');
+const searchBar = document.getElementById('searchBar');
+const overlay = document.getElementById('fullscreenOverlay');
+const iframe = document.getElementById('zoneFullscreenFrame');
+const closeBtn = document.getElementById('closeFullscreen');
+const gameTitle = document.getElementById('gameTitle');
+const gameAuthor = document.getElementById('gameAuthor');
+
+const zonesURLs = [
+  "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json",
+  "https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json",
+  "https://cdn.jsdelivr.net/gh/gn-math/assets@master/zones.json",
+  "https://cdn.jsdelivr.net/gh/gn-math/assets/zones.json"
+];
+
+const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
+const htmlURL = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
+
+let zones = [];
+let zonesURL = zonesURLs[Math.floor(Math.random() * zonesURLs.length)];
+
+async function loadZones() {
+  try {
+    const response = await fetch(zonesURL);
+    zones = await response.json();
+    zones = zones.filter(zone => zone.id >= 0 && zone.id <= 5000);
+    displayZones();
+  } catch (e) {
+    container.innerHTML = 'Failed to load zones.';
+  }
+}
+
+function displayZones() {
+  container.innerHTML = '';
+  zones.forEach(zone => {
+    const item = document.createElement('div');
+    item.className = 'zone-item';
+
+    const img = document.createElement('img');
+    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL);
+    img.alt = zone.name;
+    img.loading = 'lazy';
+
+    const btn = document.createElement('button');
+    btn.textContent = zone.name;
+    btn.onclick = () => openZone(zone);
+
+    item.onclick = () => openZone(zone);
+
+    item.appendChild(img);
+    item.appendChild(btn);
+    container.appendChild(item);
+  });
+
+  const imgs = document.querySelectorAll('img[data-src]');
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        obs.unobserve(img);
+      }
+    });
+  }, { rootMargin: '100px', threshold: 0.1 });
+  imgs.forEach(i => observer.observe(i));
+}
+
+function filterZones() {
+  const query = searchBar.value.toLowerCase();
+  const filtered = zones.filter(z => z.name.toLowerCase().includes(query));
+  displayFiltered(filtered);
+}
+
+function displayFiltered(filteredZones) {
+  container.innerHTML = '';
+  filteredZones.forEach(zone => {
+    const item = document.createElement('div');
+    item.className = 'zone-item';
+
+    const img = document.createElement('img');
+    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL);
+    img.alt = zone.name;
+    img.loading = 'lazy';
+
+    const btn = document.createElement('button');
+    btn.textContent = zone.name;
+    btn.onclick = () => openZone(zone);
+
+    item.onclick = () => openZone(zone);
+
+    item.appendChild(img);
+    item.appendChild(btn);
+    container.appendChild(item);
+  });
+  const imgs = document.querySelectorAll('img[data-src]');
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        obs.unobserve(img);
+      }
+    });
+  }, { rootMargin: '100px', threshold: 0.1 });
+  imgs.forEach(i => observer.observe(i));
+}
+
+async function openZone(zone) {
+  overlay.style.display = 'flex';
+
+  gameTitle.textContent = zone.name;
+  gameAuthor.textContent = 'by ' + zone.author;
+
+  if (zone.url.startsWith('http')) {
+    iframe.src = zone.url;
+  } else {
+    fetch(zone.url.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL))
+      .then(res => res.text())
+      .then(html => {
+        iframe.srcdoc = html;
+      })
+      .catch(() => {
+        iframe.src = '';
+        alert('Failed to load zone content.');
+      });
+  }
+}
+
+closeBtn.onclick = () => {
+  overlay.style.display = 'none';
+  iframe.src = '';
+};
+
+loadZones();
+</script>
+</body>
+</html>
