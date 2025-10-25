@@ -1,75 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Dominum Proxy — Home</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <script defer src="assets/js/main.js"></script>
-  </head>
-  <body class="page-home">
-    <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
-    <!-- Left vertical sidebar (inspired by your screenshot) -->
-    <aside class="left-sidebar">
-      <div class="sidebar-top">
-        <div class="logo">DP</div>
-        <nav class="side-icons">
-          <a title="Home" href="index.html">🏠</a>
-          <a title="Games" href="games.html">🎮</a>
-          <a title="Apps" href="apps.html">▦</a>
-          <a title="Extras" href="extras.html">＋</a>
-          <a title="Settings" href="settings.html">⚙️</a>
-        </nav>
-      </div>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dominum</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-      <div class="sidebar-bottom">
-        <div class="clock" id="sidebarClock">--:--</div>
-        <div class="date muted" id="sidebarDate">—</div>
-        <div class="battery">🔋 100%</div>
-      </div>
-    </aside>
+<style>
+  :root {
+    --bg: #0b0a16;
+    --accent: #7a5cff;
+    --blue: #00bfff;
+    --text: #e6e6ff;
+  }
 
-    <main class="home-stage">
-      <div class="stage-inner">
-        <h1 class="neon-title">Dominum</h1>
-        <p class="neon-sub">Fast • Private • Sleek</p>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-        <div class="search-wrap glass">
-          <div class="search-icon">🔍</div>
-          <input class="search-input" placeholder="browse the internet..." aria-label="search" />
-        </div>
+  body {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+  }
 
-        <div class="shortcut-tray glass">
-          <div class="shortcuts">
-            <a class="shortcut" href="#" data-key="google">
-              <div class="icon">G</div>
-              <div class="label">Google</div>
-            </a>
-            <a class="shortcut" href="#" data-key="easyfun">
-              <div class="icon">🙂</div>
-              <div class="label">Easyfun</div>
-            </a>
-            <a class="shortcut" href="#" data-key="gitlab">
-              <div class="icon">GL</div>
-              <div class="label">GitLab</div>
-            </a>
-            <a class="shortcut" href="#" data-key="wiki">
-              <div class="icon">W</div>
-              <div class="label">Wiki</div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </main>
+  /* Sidebar */
+  aside {
+    width: 70px;
+    background: rgba(255, 255, 255, 0.03);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 0;
+  }
 
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <span>© <span id="year"></span> Dominum Proxy</span>
-        <nav class="footer-nav">
-          <a href="credits.html">Credits</a>
-          <a href="extras.html">Extras</a>
-        </nav>
-      </div>
-    </footer>
-  </body>
+  .sidebar-top,
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  aside i {
+    font-size: 1.4em;
+    cursor: pointer;
+    color: var(--text);
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  aside i:hover {
+    color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  /* Iframe Container */
+  iframe {
+    flex: 1;
+    border: none;
+    width: 100%;
+    height: 100vh;
+  }
+</style>
+</head>
+<body>
+
+  <aside>
+    <div class="sidebar-top">
+      <i class="fa-solid fa-house" title="Home" onclick="loadPage('home')"></i>
+      <i class="fa-solid fa-gamepad" title="Games" onclick="loadPage('games')"></i>
+      <i class="fa-solid fa-box-archive" title="Apps" onclick="loadPage('apps')"></i>
+      <i class="fa-solid fa-magnifying-glass" title="Search" onclick="loadPage('search')"></i>
+      <i class="fa-solid fa-gear" title="Settings" onclick="loadPage('settings')"></i>
+    </div>
+
+    <div class="sidebar-bottom">
+      <i class="fa-brands fa-discord" title="Discord" onclick="window.open('https://dsc.gg/dominum/', '_blank')"></i>
+    </div>
+  </aside>
+
+  <iframe id="content-frame" src="assets/pages/home.html"></iframe>
+
+  <script>
+    // we all love small js snippets dont we
+  function loadPage(page) {
+    document.getElementById("content-frame").src = `assets/pages/${page}.html`;
+  }
+</script>
+
+</body>
 </html>
