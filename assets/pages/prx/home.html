@@ -8,76 +8,87 @@
     --bg: #0d0d10;
     --accent: #7a5cff;
     --text: #e6e6ff;
-    --input-bg: #1b1b22;
+    --input-bg: rgba(27,27,34,0.85);
   }
 
-  body {
+  html, body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    height: 100%;
     font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
     overflow: hidden;
   }
 
+  #particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    top: 0;
+    left: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+  }
+
   .logo {
-    margin-bottom: 30px;
     font-size: 3rem;
     font-weight: bold;
+    margin-bottom: 40px;
     color: var(--accent);
     text-shadow: 0 0 12px rgba(122,92,255,0.6);
   }
 
   .search-container {
+    position: relative;
     width: 100%;
     max-width: 500px;
     display: flex;
-    justify-content: center;
-    position: relative;
   }
 
   .search-container input {
-    width: 100%;
-    padding: 12px 20px;
-    border-radius: 30px;
-    border: none;
+    flex: 1;
+    padding: 14px 20px;
+    border-radius: 30px 0 0 30px;
+    border: 2px solid rgba(255,255,255,0.2);
     background: var(--input-bg);
     color: var(--text);
     font-size: 1rem;
     outline: none;
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
   }
 
   .search-container input:focus {
-    box-shadow: 0 0 0 3px rgba(122,92,255,0.4);
+    border-color: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
   }
 
   .search-container button {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
+    padding: 0 16px;
     border: none;
     background: var(--accent);
     color: #fff;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    border-radius: 0 30px 30px 0;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    transition: transform 0.2s ease;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease, background 0.2s ease;
   }
 
   .search-container button:hover {
-    transform: translateY(-50%) scale(1.2);
+    transform: scale(1.05);
+    background: #9a7eff;
   }
 
   .quick-links {
@@ -105,28 +116,58 @@
 </head>
 <body>
 
-<div class="logo">Dominum</div>
+<div id="particles-js"></div>
 
-<div class="search-container">
-  <input type="text" id="searchInput" placeholder="Search the web...">
-  <button id="searchBtn">🔍</button>
-</div>
+<div class="content">
+  <div class="logo">Dominum</div>
 
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search the web...">
+    <button id="searchBtn">🔍</button>
+  </div>
+
+<!-- Particles.js yay -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-const searchInput = document.getElementById('searchInput');
-const searchBtn = document.getElementById('searchBtn');
+  particlesJS("particles-js", {
+    "particles": {
+      "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+      "color": { "value": "#7a5cff" },
+      "shape": { "type": "circle" },
+      "opacity": { "value": 0.6, "random": true },
+      "size": { "value": 3, "random": true },
+      "line_linked": { "enable": true, "distance": 120, "color": "#7a5cff", "opacity": 0.4, "width": 1 },
+      "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": { "enable": true, "mode": "grab" },
+        "onclick": { "enable": true, "mode": "push" },
+        "resize": true
+      },
+      "modes": {
+        "grab": { "distance": 140, "line_linked": { "opacity": 0.6 } },
+        "push": { "particles_nb": 4 }
+      }
+    },
+    "retina_detect": true
+  });
 
-function performSearch() {
-  const query = searchInput.value.trim();
-  if (!query) return;
-  const url = query.includes('.') ? `https://${query}` : `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
-  window.location.href = `/s/embed.html#${url}`;
-}
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
 
-searchBtn.addEventListener('click', performSearch);
-searchInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') performSearch();
-});
+  function performSearch() {
+    const query = searchInput.value.trim();
+    if (!query) return;
+    const url = query.includes('.') ? `https://${query}` : `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
+    window.location.href = `/s/embed.html#${url}`;
+  }
+
+  searchBtn.addEventListener('click', performSearch);
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') performSearch();
+  });
 </script>
 
 </body>
