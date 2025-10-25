@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dominum Apps</title>
+<style>
+  :root {
+    --bg: #1a1030;
+    --card-bg: #251841;
+    --accent: #7a5cff;
+    --text: #e6e6fa;
+    --border: #ffffff;
+    --radius: 12px;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  #searchBar {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.875rem 1rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  #searchBar:focus {
+    background: #fff;
+    color: var(--bg);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.25);
+  }
+
+  #container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 18px;
+    margin-top: 1rem;
+  }
+
+  .app-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+    opacity: 0;
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  .app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+  }
+
+  .app-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .app-card span {
+    padding: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+    flex-shrink: 0;
+    word-break: break-word;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<input type="text" id="searchBar" placeholder="Search apps...">
+<div id="container"></div>
+
+<script>
+const container = document.getElementById('container');
+const searchBar = document.getElementById('searchBar');
+
+const apps = [
+  { "title": "Soundcloud", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/soundcloud.png", "url": "https://open.spotify.com/" },
+  { "title": "Invidious", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/invidious.png", "url": "https://www.inv.nadeko.net/" },
+  { "title": "Temp mail", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/tempmail.png", "url": "https://temp-mail.io/" },
+  { "title": "Roblox", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/Calc-Flood@main/pedos.png", "url": "https://easyfun.gg/embed/roblox.html" },
+  { "title": "Reddit", "image": "https://www.logo.wine/a/logo/Reddit/Reddit-Logomark-White-Dark-Background-Logo.wine.svg", "url": "https://reddit.com/" },
+  { "title": "Snapchat", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/snapchat.png", "url": "https://snapchat.com/" },
+  { "title": "Instagram", "image": "https://raw.githubusercontent.com/Darkdragonzxs/dominum/refs/heads/main/assets/images/apps/instagram.png", "url": "https://instagram.com/" },
+  { "title": "Disc0rd", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/discord.png", "url": "https://discord.com/" },
+  { "title": "TikTok", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/tiktok.png", "url": "https://tiktok.com/" },
+  { "title": "Twitch", "image": "https://cdn.jsdelivr.net/gh/Darkdragonzxs/dominum@main/assets/images/apps/twitch.png", "url": "https://twitch.tv/" }
+];
+
+function displayApps(list) {
+  container.innerHTML = '';
+  list.forEach((app, i) => {
+    const card = document.createElement('div');
+    card.className = 'app-card';
+    card.style.animationDelay = `${i*0.05}s`;
+    card.innerHTML = `<img src="${app.image}" alt="${app.title}"><span>${app.title}</span>`;
+    card.onclick = () => window.location.href = `/s/embed.html#${app.url}`;
+    container.appendChild(card);
+  });
+}
+
+displayApps(apps);
+
+searchBar.addEventListener('input', () => {
+  const query = searchBar.value.toLowerCase();
+  const filtered = apps.filter(app => app.title.toLowerCase().includes(query));
+  displayApps(filtered);
+});
+</script>
+
+</body>
+</html>
