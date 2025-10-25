@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - Dominum</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: #0b0a16;
+    color: #e6e6ff;
+    font-family: 'Orbitron', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .container {
+    z-index: 1;
+  }
+
+  h1 {
+    font-size: 6em;
+    color: #7a5cff;
+    margin: 0;
+  }
+
+  h2 {
+    color: #00bfff;
+    font-size: 1.5em;
+    margin-top: 10px;
+    opacity: 0.8;
+  }
+
+  p {
+    margin-top: 20px;
+    font-size: 1em;
+    color: #7a5cff;
+    opacity: 0.8;
+  }
+
+  .buttons {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  a, button {
+    padding: 10px 20px;
+    font-size: 1em;
+    font-family: 'Orbitron', sans-serif;
+    color: #0b0a16;
+    background: linear-gradient(90deg, #7a5cff, #00bfff);
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  a:hover, button:hover {
+    transform: scale(1.1);
+  }
+</style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<div class="container">
+  <h1>404</h1>
+  <h2>Page Not Found</h2>
+  <p>you aint a hacker little cro...</p>
+  <p>if you were using the proxy, just press reload.</p>
+  <div class="buttons">
+    <button onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> Reload</button>
+    <a href="/"><i class="fa-solid fa-house"></i> Return Home</a>
+  </div>
+</div>
+<!-- particles! yay! -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+    "color": { "value": ["#7a5cff", "#00bfff"] },
+    "shape": { "type": "circle" },
+    "opacity": { "value": 0.5 },
+    "size": { "value": 3 },
+    "move": { "enable": true, "speed": 2 }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": { "enable": true, "mode": "repulse" }
+    }
+  },
+  "retina_detect": true
+});
+</script>
+
+</body>
+</html>
