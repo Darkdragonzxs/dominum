@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home - Dominum</title>
+
+<!-- can i get the mic a little higher 🗣 -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+  :root {
+    --bg: #0b0a16;
+    --accent: #7a5cff;
+    --blue: #00bfff;
+    --text: #e6e6ff;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  #particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 25px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  h1 {
+    color: var(--accent);
+    font-size: 3em;
+    letter-spacing: 2px;
+  }
+
+  p {
+    color: var(--blue);
+    font-size: 1em;
+    margin-top: 10px;
+    opacity: 0.8;
+  }
+
+  .shortcuts {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+  }
+
+  .shortcut {
+    padding: 10px 22px;
+    border: 1px solid var(--accent);
+    border-radius: 30px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .shortcut i {
+    font-size: 1em;
+  }
+
+  .shortcut:hover {
+    color: var(--blue);
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px var(--blue);
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- Particles.js -->
+  <div id="particles-js"></div>
+
+  <div class="content">
+    <div class="logo">
+      <img src="https://dominum-test.vercel.app/assets/images/dominum-transparent.png" alt="Logo">
+    </div>
+
+    <!-- Title -->
+    <h1>DOMINUM</h1>
+    <p>Choose one of the options below to start using dominum.</p>
+
+    <div class="shortcuts">
+      <a href="/assets/pages/games.html" class="shortcut"><i class="fa-solid fa-gamepad"></i> Games</a>
+      <a href="/assets/pages/apps.html" class="shortcut"><i class="fa-solid fa-box-archive"></i> Apps</a>
+      <a href="/assets/pages/search.html" class="shortcut"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
+      <a href="/assets/pages/settings.html" class="shortcut"><i class="fa-solid fa-gear"></i> Settings</a>
+    </div>
+  </div>
+
+  <!-- copy pasted code -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 60 },
+        "color": { "value": ["#7a5cff", "#00bfff"] },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5 },
+        "size": { "value": 2 },
+        "line_linked": {
+          "enable": true,
+          "distance": 130,
+          "color": "#7a5cff",
+          "opacity": 0.2,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 1.2,
+          "direction": "none",
+          "out_mode": "out"
+        }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": false }
+        },
+        "modes": { "repulse": { "distance": 100 } }
+      },
+      "retina_detect": true
+    });
+  </script>
+
+</body>
+</html>
