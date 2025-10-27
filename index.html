@@ -140,11 +140,18 @@ function loadPage(page){
     const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
     Object.entries(t).forEach(([v,k])=>root.style.setProperty(v,k));
   }else Object.entries(themes[name]).forEach(([v,k])=>root.style.setProperty(v,k));
-  document.addEventListener("keydown",e=>{
-    const key=localStorage.getItem("dominum-panic-key");
-    const link=localStorage.getItem("dominum-panic-link");
-    if(key&&link&&e.key.toLowerCase()===key)window.location.href=link;
+  document.addEventListener("DOMContentLoaded", () => {
+  if (!localStorage.getItem("dominum-panic-key")) localStorage.setItem("dominum-panic-key", "`");
+  if (!localStorage.getItem("dominum-panic-link")) localStorage.setItem("dominum-panic-link", "https://google.com/");
+
+  document.addEventListener("keydown", e => {
+    const key = localStorage.getItem("dominum-panic-key");
+    const link = localStorage.getItem("dominum-panic-link");
+    if (key && link && e.key.toLowerCase() === key.toLowerCase()) {
+      window.location.href = link;
+    }
   });
+});
 loadTheme();
 </script>
 </body>
