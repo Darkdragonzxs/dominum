@@ -131,23 +131,18 @@
   width: 100%;
   border: none;
 }
-</style>
+  </style>
 </head>
 <body>
 <input type="text" id="searchBar" placeholder="Search games..." oninput="filterZones()">
-
 <div id="container">Loading...</div>
-
 <div id="fullscreenOverlay">
   <div id="fullscreenHeader">
-    <div>
-      <h2 id="gameTitle">Game Title</h2>
-    </div>
+    <h2 id="gameTitle">Game Title</h2>
     <button id="closeFullscreen" title="Close">&times;</button>
   </div>
   <iframe id="zoneFullscreenFrame"></iframe>
 </div>
-
 <script>
 const container = document.getElementById('container');
 const searchBar = document.getElementById('searchBar');
@@ -155,13 +150,10 @@ const overlay = document.getElementById('fullscreenOverlay');
 const iframe = document.getElementById('zoneFullscreenFrame');
 const closeBtn = document.getElementById('closeFullscreen');
 const gameTitle = document.getElementById('gameTitle');
-const gameAuthor = document.getElementById('gameAuthor');
 
 const zonesURLs = [
-  "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json",
-  "https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json",
-  "https://cdn.jsdelivr.net/gh/gn-math/assets@master/zones.json",
-  "https://cdn.jsdelivr.net/gh/gn-math/assets/zones.json"
+  "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json"
+  // other URLs
 ];
 
 const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
@@ -194,15 +186,16 @@ function displayZones() {
 
     const btn = document.createElement('button');
     btn.textContent = zone.name;
-    btn.onclick = () => openZone(zone);
-
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openZone(zone);
+    };
     item.onclick = () => openZone(zone);
-
     item.appendChild(img);
     item.appendChild(btn);
     container.appendChild(item);
   });
-
+  // Lazy load images
   const imgs = document.querySelectorAll('img[data-src]');
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(e => {
@@ -235,14 +228,16 @@ function displayFiltered(filteredZones) {
 
     const btn = document.createElement('button');
     btn.textContent = zone.name;
-    btn.onclick = () => openZone(zone);
-
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openZone(zone);
+    };
     item.onclick = () => openZone(zone);
-
     item.appendChild(img);
     item.appendChild(btn);
     container.appendChild(item);
   });
+  // Lazy load images
   const imgs = document.querySelectorAll('img[data-src]');
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(e => {
@@ -260,20 +255,34 @@ async function openZone(zone) {
   overlay.style.display = 'flex';
 
   gameTitle.textContent = zone.name;
-  gameAuthor.textContent = 'by ' + zone.author;
+  if (!zone.author) zone.author = 'Unknown';
 
-  if (zone.url.startsWith('http')) {
-    iframe.src = zone.url;
+  const zoneUrl = zone.url;
+  if (!zoneUrl) {
+    alert('Zone URL is missing.');
+    return;
+  }
+
+  const isAbsolute = zoneUrl.startsWith('http');
+
+  if (isAbsolute) {
+    // Load directly
+    iframe.src = zoneUrl;
   } else {
-    fetch(zone.url.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL))
-      .then(res => res.text())
-      .then(html => {
-        iframe.srcdoc = html;
-      })
-      .catch(() => {
-        iframe.src = '';
-        alert('Failed to load zone content.');
-      });
+    // Fetch, create Blob URL
+    const fullUrl = zoneUrl.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL);
+    try {
+      const response = await fetch(fullUrl);
+      const htmlContent = await response.text();
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const blobUrl = URL.createObjectURL(blob);
+      iframe.src = blobUrl;
+      iframe.onload = () => {
+        URL.revokeObjectURL(blobUrl);
+      };
+    } catch (e) {
+      alert('Failed to load zone content.');
+    }
   }
 }
 
