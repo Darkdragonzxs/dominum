@@ -185,18 +185,20 @@ document.getElementById("openAboutBlank").onclick=()=>{
   win.document.body.appendChild(iframe);
 };
 
-document.getElementById("savePanic").onclick=()=>{
-  localStorage.setItem("dominum-panic-key",document.getElementById("panicKey").value.toLowerCase());
-  localStorage.setItem("dominum-panic-link",document.getElementById("panicLink").value);
-};
+const panicKeyInput = document.getElementById("panicKey");
+const panicLinkInput = document.getElementById("panicLink");
 
-document.addEventListener("keydown",e=>{
-  const key=localStorage.getItem("dominum-panic-key");
-  const link=localStorage.getItem("dominum-panic-link");
-  if(key&&link&&e.key.toLowerCase()===key){
-    window.location.href=link;
-  }
-});
+if (!localStorage.getItem("dominum-panic-key")) localStorage.setItem("dominum-panic-key", "`");
+if (!localStorage.getItem("dominum-panic-link")) localStorage.setItem("dominum-panic-link", "https://google.com/");
+
+panicKeyInput.value = localStorage.getItem("dominum-panic-key");
+panicLinkInput.value = localStorage.getItem("dominum-panic-link");
+
+document.getElementById("savePanic").onclick = () => {
+  localStorage.setItem("dominum-panic-key", panicKeyInput.value.toLowerCase());
+  localStorage.setItem("dominum-panic-link", panicLinkInput.value);
+  alert("Panic settings saved!");
+};
 
 loadTheme();
 </script>
