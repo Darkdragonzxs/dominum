@@ -257,7 +257,7 @@ updateTabWidths();
 </script>
 <script>
   const root=document.documentElement;
-  const name=localStorage.getItem("dominim-theme")||"default";
+  const name=localStorage.getItem("dominum-theme")||"default";
   const themes={
     default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff"},
     cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0"},
@@ -266,12 +266,12 @@ updateTabWidths();
     darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6"}
   };
   if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominim-custom-theme")||"{}");
+    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
     Object.entries(t).forEach(([v,k])=>root.style.setProperty(v,k));
   }else Object.entries(themes[name]).forEach(([v,k])=>root.style.setProperty(v,k));
   document.addEventListener("keydown",e=>{
-    const key=localStorage.getItem("dominim-panic-key");
-    const link=localStorage.getItem("dominim-panic-link");
+    const key=localStorage.getItem("dominum-panic-key");
+    const link=localStorage.getItem("dominum-panic-link");
     if(key&&link&&e.key.toLowerCase()===key)window.location.href=link;
   });
 </script>
