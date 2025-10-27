@@ -90,7 +90,7 @@
 
   <div class="setting-box">
     <label>about:blank Mode</label>
-    <button id="openAboutBlank">Open Current Page in about:blank</button>
+    <button id="openAboutBlank">Open Site in about:blank</button>
   </div>
 
   <div class="setting-box">
@@ -121,13 +121,21 @@
     neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff"},
     darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6"}
   };
+
   function applyTheme(theme){
     Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));
+    try{
+      if(window.parent&&window.parent!==window){
+        Object.entries(theme).forEach(([v,k])=>window.parent.document.documentElement.style.setProperty(v,k));
+      }
+    }catch(e){}
   }
+
   function saveTheme(themeName,custom){
     localStorage.setItem("dominim-theme",themeName);
     if(custom)localStorage.setItem("dominim-custom-theme",JSON.stringify(custom));
   }
+
   function loadTheme(){
     const name=localStorage.getItem("dominim-theme")||"default";
     if(name==="custom"){
@@ -136,6 +144,7 @@
     }else applyTheme(themes[name]);
     document.getElementById("theme").value=name;
   }
+
   document.getElementById("theme").onchange=e=>{
     if(e.target.value==="custom"){
       document.getElementById("custom-theme-inputs").style.display="block";
@@ -145,6 +154,7 @@
       saveTheme(e.target.value);
     }
   };
+
   document.getElementById("saveCustom").onclick=()=>{
     const custom={
       "--bg":bgColor.value,"--accent":accentColor.value,"--blue":blueColor.value,"--text":textColor.value
@@ -156,7 +166,7 @@
   document.getElementById("openAboutBlank").onclick=()=>{
     const win=window.open("about:blank","_blank");
     const iframe=win.document.createElement("iframe");
-    iframe.src=window.location.href;
+    iframe.src="/index.html";
     iframe.style="border:none;width:100%;height:100vh;";
     win.document.body.style.margin="0";
     win.document.body.appendChild(iframe);
@@ -166,6 +176,7 @@
     localStorage.setItem("dominim-panic-key",document.getElementById("panicKey").value.toLowerCase());
     localStorage.setItem("dominim-panic-link",document.getElementById("panicLink").value);
   };
+
   document.addEventListener("keydown",e=>{
     const key=localStorage.getItem("dominim-panic-key");
     const link=localStorage.getItem("dominim-panic-link");
