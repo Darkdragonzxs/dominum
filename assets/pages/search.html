@@ -256,9 +256,8 @@ window.addEventListener('resize', updateTabWidths);
 updateTabWidths();
 </script>
 <script>
-const root=document.documentElement;
-  const name=localStorage.getItem("dominim-theme")||"default";
-  const themes={
+const root = document.documentElement;
+const themes = {
   default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
            "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
   cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
@@ -269,13 +268,21 @@ const root=document.documentElement;
         "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
   darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
            "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-    dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
+  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
          "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"}
 };
-  if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominim-custom-theme")||"{}");
-    Object.entries(t).forEach(([v,k])=>root.style.setProperty(v,k));
-  }else Object.entries(themes[name]).forEach(([v,k])=>root.style.setProperty(v,k));
+
+function applyTheme(theme){
+  Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
+}
+
+(function(){
+  const name = localStorage.getItem("dominum-theme") || "default";
+  if(name === "custom"){
+    const custom = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
+    applyTheme(custom);
+  } else applyTheme(themes[name]);
+})();
 </script>
 </body>
 </html>
