@@ -93,15 +93,7 @@
     document.getElementById("content-frame").src = `assets/pages/${page}.html`;
   }
 </script>
-<script>
-
-  function loadPage(page){
-  const frame=document.getElementById("content-frame");
-  frame.src=`assets/pages/${page}.html`;
-  frame.onload=()=>loadTheme();
-}
-  
-  const root=document.documentElement;
+<script>  
   const root=document.documentElement;
 const themes={
   default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
@@ -117,6 +109,11 @@ const themes={
     dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
          "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"}
 };
+
+function loadPage(page){
+  const frame=document.getElementById("content-frame");
+  frame.src=`assets/pages/${page}.html`;
+}
 
 function applyTheme(theme){
   Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));
