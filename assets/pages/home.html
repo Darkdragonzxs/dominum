@@ -174,10 +174,10 @@
       "retina_detect": true
     });
   </script>
-  <script>
-      const root=document.documentElement;
-  const root=document.documentElement;
-const themes={
+<script>
+const root=document.documentElement;
+  const name=localStorage.getItem("dominim-theme")||"default";
+  const themes={
   default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
            "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
   cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
@@ -191,27 +191,10 @@ const themes={
     dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
          "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"}
 };
-
-function applyTheme(theme){
-  Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));
-  const frame=document.getElementById("content-frame");
-  try {
-    Object.entries(theme).forEach(([v,k])=>frame.contentWindow.document.documentElement.style.setProperty(v,k));
-  } catch(e){}
-}
-
-function loadTheme(){
-  const name=localStorage.getItem("dominum-theme")||"default";
   if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
-    applyTheme(t);
-  }else applyTheme(themes[name]);
-}
-
-  if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
+    const t=JSON.parse(localStorage.getItem("dominim-custom-theme")||"{}");
     Object.entries(t).forEach(([v,k])=>root.style.setProperty(v,k));
   }else Object.entries(themes[name]).forEach(([v,k])=>root.style.setProperty(v,k));
-  </script>
+</script>
 </body>
 </html>
