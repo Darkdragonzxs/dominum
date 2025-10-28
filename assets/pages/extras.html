@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extras - Dominum</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+  :root {
+    --bg:#0b0a16;--accent:#7a5cff;--blue:#00bfff;--text:#e6e6ff;
+    --surface:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--card-bg:rgba(255,255,255,0.03);
+  }
+  body {
+    margin:0;padding:40px;background:var(--bg);color:var(--text);
+    font-family:'Orbitron',sans-serif;display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;height:100vh;overflow-y:auto;
+  }
+  h1 {
+    font-size:2.2em;margin-bottom:30px;text-transform:uppercase;color:var(--accent);
+  }
+  .extras-buttons {
+    display:flex;gap:20px;flex-wrap:wrap;justify-content:center;
+  }
+  .extras-btn {
+    background:var(--surface);border:2px solid var(--border);color:var(--text);
+    padding:15px 30px;border-radius:10px;cursor:pointer;font-size:1em;
+    text-transform:uppercase;letter-spacing:1px;transition:all 0.3s ease;
+  }
+  .extras-btn:hover {
+    background:var(--accent);color:#fff;transform:translateY(-3px);
+  }
+  .modal {
+    display:none;position:fixed;z-index:999;left:0;top:0;width:100%;height:100%;
+    background:rgba(10,10,20,0.8);backdrop-filter:blur(5px);justify-content:center;align-items:center;
+  }
+  .modal.active {display:flex;}
+  .modal-content {
+    background:var(--card-bg);border:2px solid var(--border);border-radius:15px;
+    padding:25px;width:80%;max-width:700px;max-height:80%;overflow-y:auto;
+    box-shadow:0 0 20px var(--accent);animation:fadeIn 0.3s ease;
+  }
+  .modal-header {
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;
+  }
+  .modal-header h2 {color:var(--accent);font-size:1.5em;}
+  .close-btn {cursor:pointer;font-size:1.3em;color:var(--text);transition:color 0.3s ease;}
+  .close-btn:hover {color:var(--accent);}
+  .card {
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:15px;display:flex;align-items:flex-start;gap:15px;margin-bottom:15px;
+    transition:transform 0.2s ease,border-color 0.3s ease;
+  }
+  .card:hover {border-color:var(--accent);transform:translateY(-3px);}
+  .card img {width:60px;height:60px;border-radius:50%;object-fit:cover;}
+  .card-content {flex:1;}
+  .card h3 {margin:0;font-size:1.1em;color:var(--accent);}
+  .card p.role {font-size:0.9em;color:var(--blue);margin-bottom:5px;}
+  .card p.desc {font-size:0.85em;color:var(--text);opacity:0.9;}
+  @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<h1>Extras</h1>
+<div class="extras-buttons">
+  <button class="extras-btn" onclick="openModal('credits-modal')"><i class="fa-solid fa-star"></i> Credits</button>
+  <button class="extras-btn" onclick="openModal('partners-modal')"><i class="fa-solid fa-handshake"></i> Partners</button>
+</div>
+<div class="modal" id="credits-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Credits</h2>
+      <span class="close-btn" onclick="closeModal('credits-modal')">&times;</span>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/60" alt="User">
+      <div class="card-content">
+        <h3>John Doe</h3>
+        <p class="role">Lead Developer</p>
+        <p class="desc">Handled core functionality, theme system, and page routing.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/60" alt="User">
+      <div class="card-content">
+        <h3>Jane Smith</h3>
+        <p class="role">UI/UX Designer</p>
+        <p class="desc">Designed the visual style and helped with animations and layout structure.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="partners-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Partners</h2>
+      <span class="close-btn" onclick="closeModal('partners-modal')">&times;</span>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/60" alt="Partner Logo">
+      <div class="card-content">
+        <h3>Neon Games</h3>
+        <p class="role">Owned by: AuroraDev</p>
+        <p class="desc">A creative studio that provided game integrations and exclusive assets for Dominum’s projects.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/60" alt="Partner Logo">
+      <div class="card-content">
+        <h3>CyberNode Hosting</h3>
+        <p class="role">Owned by: TechX</p>
+        <p class="desc">Provided reliable hosting and backend infrastructure for Dominum’s online services.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+document.querySelectorAll('.modal').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id);});});
+try{
+  const themeVars=window.parent.document.documentElement.style;
+  for(let i=0;i<themeVars.length;i++){
+    const p=themeVars[i];
+    document.documentElement.style.setProperty(p,themeVars.getPropertyValue(p));
+  }
+}catch(e){}
+</script>
+</body>
+</html>
