@@ -78,6 +78,7 @@
 <div class="extras-buttons">
   <button class="extras-btn" onclick="openModal('credits-modal')"><i class="fa-solid fa-star"></i> Credits</button>
   <button class="extras-btn" onclick="openModal('partners-modal')"><i class="fa-solid fa-handshake"></i> Partners</button>
+  <button class="extras-btn" onclick="openModal('vortex-modal')"><i class="fa-solid fa-comments"></i> Vortex Chat</button>
 </div>
 <div class="modal" id="credits-modal">
   <div class="modal-content">
@@ -352,6 +353,56 @@
     </div>
   </div>
 </div>
+<div class="modal" id="vortex-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Vortex Chat</h2>
+      <span class="close-btn" onclick="closeModal('vortex-modal')">&times;</span>
+    </div>
+    <p style="text-align:center;margin-bottom:15px;">Select a link to open:</p>
+    <div class="link-btns" id="vortex-links">
+      <button class="link-btn" onclick="openEmbed('https://vortexos.net/embed/dominum')">Link 1</button>
+      <button class="link-btn" onclick="openEmbed('https://vtx.chat/embed/dominum')">Link 2</button>
+      <button class="link-btn" onclick="openEmbed('https://vortexos.global.ssl.fastly.net/embed/dominum')">Link 3</button>
+      <button class="link-btn" onclick="openEmbed('https://vtx.bloxcraft-ubg.workers.dev/embed/dominum')">Link 4</button>
+      <button class="link-btn" onclick="openEmbed('https://vortexisgoated.xn--72cg7bdd3bro6b3ab9c8btw4x.com/embed/dominum')">5</button>
+      <button class="link-btn" onclick="openEmbed('https://apush.lotossutra.at/embed/dominum')">Link 5</button>
+      <button class="link-btn" onclick="openEmbed('https://dpsisa.chickenkiller.com/embed/dominum')">Link 6</button>
+      <button class="link-btn" onclick="openEmbed('https://mail.linkylike.com/embed/dominum')">Link 7</button>
+      <button class="link-btn" onclick="openEmbed('https://autoconfig.cus-mail-ph27-eby74.doyoumail.co/embed/dominum')">Link 8</button>
+      <button class="link-btn" onclick="openEmbed('https://vortexos.net.cdn.cloudflare.net/embed/dominum')">Link 9</button>
+      <button class="link-btn" onclick="openEmbed('https://vortex-chat.ctx.cl/embed/dominum')">Link 10</button>
+      <button class="link-btn" onclick="openEmbed('https://dashboard.clienturl.net/embed/dominum')">Link 11</button>
+      <button class="link-btn" onclick="openEmbed('https://dashboard.fluxus.org/embed/dominum')">Link 12</button>
+      <button class="link-btn" onclick="openEmbed('https://blight.404.mn/embed/dominum')">Link 13</button>
+      <button class="link-btn" onclick="openEmbed('https://auth.mcwrite.net/embed/dominum')">Link 14</button>
+    </div>
+  </div>
+</div>
+<div id="embed-container" style="
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  z-index:2000;
+  background-color:#000;
+">
+  <button onclick="closeEmbed()" style="
+    position:absolute;
+    top:15px;right:20px;
+    z-index:2001;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:10px 20px;
+    font-family:'Orbitron',sans-serif;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background .3s;
+  ">Close</button>
+  <iframe id="embed-frame" src="" style="width:100%;height:100%;border:none;"></iframe>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
 particlesJS("particles-js", {
@@ -420,6 +471,19 @@ document.getElementById('website-btn').addEventListener('click',()=>{
   if(currentPartner.website&&currentPartner.website!=='none')window.open(currentPartner.website,'_blank');
   else if(currentPartner.discord)window.open(currentPartner.discord,'_blank');
 });
+function openEmbed(url){
+  closeModal('vortex-modal');
+  const embedContainer = document.getElementById('embed-container');
+  const iframe = document.getElementById('embed-frame');
+  iframe.src = url;
+  embedContainer.style.display = 'block';
+}
+function closeEmbed(){
+  const embedContainer = document.getElementById('embed-container');
+  const iframe = document.getElementById('embed-frame');
+  iframe.src = '';
+  embedContainer.style.display = 'none';
+}
 try{
   const themeVars=window.parent.document.documentElement.style;
   for(let i=0;i<themeVars.length;i++){
