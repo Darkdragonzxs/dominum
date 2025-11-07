@@ -7,6 +7,17 @@
 <link rel="icon" href="/assets/images/transparent-dominum.png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<meta name="description" content="A proxy site with many promising features :D - Also Fish" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="" id="og-url" />
+<meta property="og:title" content="Dominum" />
+<meta property="og:description" content="A proxy site with many promising features :D - Also Fish" />
+<meta property="og:image" content="/assets/images/transparent-dominum.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="" id="twitter-url" />
+<meta name="twitter:title" content="Dominum" />
+<meta name="twitter:description" content="A proxy site with many promising features :D - Also Fish" />
+<meta name="twitter:image" content="/assets/images/transparent-dominum.png" />
 
 <style>
   :root {
@@ -104,6 +115,10 @@ function loadPage(page) {
     };
   }, 300);
 }
+
+const currentUrl = window.location.href;
+    document.getElementById('og-url').setAttribute('content', currentUrl);
+    document.getElementById('twitter-url').setAttribute('content', currentUrl);
 </script>
 
 <script>
