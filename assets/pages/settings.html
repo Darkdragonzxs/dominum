@@ -42,7 +42,7 @@ h1{color:var(--accent);font-size:2.5em;margin-bottom:30px}
   margin-bottom:25px;
 }
 label{display:block;margin-bottom:8px;color:var(--blue)}
-select,input[type="color"],input[type="text"],input[type="url"],button{
+select,input[type="color"],input[type="text"],input[type="url"],button,input[type="file"]{
   width:100%;
   padding:10px;
   border:none;
@@ -93,6 +93,29 @@ button:hover{
   </div>
 
   <div class="setting-box">
+    <label>Tab Cloak</label>
+    <select id="tabCloakPreset">
+      <option value="none">None</option>
+      <option value="google">Google</option>
+      <option value="drive">Google Drive</option>
+      <option value="docs">Google Docs</option>
+      <option value="slides">Google Slides</option>
+      <option value="classroom">Google Classroom</option>
+      <option value="custom">Custom</option>
+    </select>
+
+    <div id="customCloakInputs" style="display:none;margin-top:10px;">
+      <label>Custom Tab Title</label>
+      <input type="text" id="customTitle" placeholder="Enter tab title">
+      <label>Tab Icon</label>
+      <input type="file" id="customIconUpload" accept="image/*">
+      <label>or Image URL</label>
+      <input type="url" id="customIconURL" placeholder="https://example.com/favicon.png">
+    </div>
+    <button id="saveCloak">Save Tab Cloak</button>
+  </div>
+
+  <div class="setting-box">
     <label>about:blank Mode</label>
     <button id="openAboutBlank">Open Site in about:blank</button>
   </div>
@@ -108,6 +131,16 @@ button:hover{
 
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
+function setCookie(name, value, days=365){
+  const d = new Date();
+  d.setTime(d.getTime() + (days*24*60*60*1000));
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+}
+function getCookie(name){
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
 particlesJS("particles-js", {
   "particles":{"number":{"value":60},"color":{"value":["#7a5cff","#00bfff"]},
   "shape":{"type":"circle"},"opacity":{"value":0.5},"size":{"value":2},
@@ -119,43 +152,26 @@ particlesJS("particles-js", {
 
 const root=document.documentElement;
 const themes={
-  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
-           "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
-  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
-         "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
-  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
-          "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
-  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
-        "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
-  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
-           "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
-         "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"}
+  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff"},
+  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0"},
+  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6"},
+  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff"},
+  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6"},
+  dnv2:{"--bg":"#050007","--accent":"#ff00de","--blue":"#00fff7","--text":"#ffffff"}
 };
-
-function applyTheme(theme){
-  Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));
-  try{
-    if(window.parent && window.parent !== window){
-      Object.entries(theme).forEach(([v,k])=>window.parent.document.documentElement.style.setProperty(v,k));
-    }
-  }catch(e){}
+function applyTheme(theme){ Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k)); }
+function saveTheme(name,custom){
+  setCookie("dominum-theme",name);
+  if(custom) setCookie("dominum-custom-theme",JSON.stringify(custom));
 }
-
-function saveTheme(themeName,custom){
-  localStorage.setItem("dominum-theme",themeName);
-  if(custom)localStorage.setItem("dominum-custom-theme",JSON.stringify(custom));
-}
-
 function loadTheme(){
-  const name=localStorage.getItem("dominum-theme")||"default";
+  const name=getCookie("dominum-theme")||"default";
   if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
+    const t=JSON.parse(getCookie("dominum-custom-theme")||"{}");
     applyTheme(t);
-  }else applyTheme(themes[name]);
+  } else applyTheme(themes[name]);
   document.getElementById("theme").value=name;
 }
-
 document.getElementById("theme").onchange=e=>{
   if(e.target.value==="custom"){
     document.getElementById("custom-theme-inputs").style.display="block";
@@ -163,17 +179,14 @@ document.getElementById("theme").onchange=e=>{
     document.getElementById("custom-theme-inputs").style.display="none";
     applyTheme(themes[e.target.value]);
     saveTheme(e.target.value);
-    if(window.parent && window.parent.loadTheme) window.parent.loadTheme();
   }
 };
-
 document.getElementById("saveCustom").onclick=()=>{
   const custom={
     "--bg":bgColor.value,"--accent":accentColor.value,"--blue":blueColor.value,"--text":textColor.value
   };
   applyTheme(custom);
   saveTheme("custom",custom);
-  if(window.parent && window.parent.loadTheme) window.parent.loadTheme();
 };
 
 document.getElementById("openAboutBlank").onclick=()=>{
@@ -188,17 +201,86 @@ document.getElementById("openAboutBlank").onclick=()=>{
 const panicKeyInput = document.getElementById("panicKey");
 const panicLinkInput = document.getElementById("panicLink");
 
-if (!localStorage.getItem("dominum-panic-key")) localStorage.setItem("dominum-panic-key", "`");
-if (!localStorage.getItem("dominum-panic-link")) localStorage.setItem("dominum-panic-link", "https://google.com/");
+if (!getCookie("dominum-panic-key")) setCookie("dominum-panic-key","`");
+if (!getCookie("dominum-panic-link")) setCookie("dominum-panic-link","https://google.com/");
 
-panicKeyInput.value = localStorage.getItem("dominum-panic-key");
-panicLinkInput.value = localStorage.getItem("dominum-panic-link");
+panicKeyInput.value = getCookie("dominum-panic-key");
+panicLinkInput.value = getCookie("dominum-panic-link");
 
 document.getElementById("savePanic").onclick = () => {
-  localStorage.setItem("dominum-panic-key", panicKeyInput.value.toLowerCase());
-  localStorage.setItem("dominum-panic-link", panicLinkInput.value);
+  setCookie("dominum-panic-key", panicKeyInput.value.toLowerCase());
+  setCookie("dominum-panic-link", panicLinkInput.value);
   alert("Panic settings saved!");
 };
+
+document.addEventListener("keydown", e=>{
+  const key = getCookie("dominum-panic-key") || "`";
+  const link = getCookie("dominum-panic-link") || "https://google.com/";
+  if(e.key.toLowerCase() === key.toLowerCase()){
+    window.location.href = link;
+  }
+});
+
+const cloakPresets = {
+  google: { title: "Google", icon: "https://www.google.com/favicon.ico" },
+  drive: { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png" },
+  docs: { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_document_x16.png" },
+  slides: { title: "Google Slides", icon: "https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_presentation_x16.png" },
+  classroom: { title: "Google Classroom", icon: "https://ssl.gstatic.com/classroom/favicon.png" }
+};
+
+const presetSelect = document.getElementById("tabCloakPreset");
+const customCloakInputs = document.getElementById("customCloakInputs");
+
+presetSelect.onchange = () => {
+  customCloakInputs.style.display = presetSelect.value === "custom" ? "block" : "none";
+};
+
+function applyCloak(title, iconURL){
+  document.title = title;
+  let link = document.querySelector("link[rel='icon']") || document.createElement("link");
+  link.rel = "icon";
+  link.href = iconURL;
+  document.head.appendChild(link);
+}
+
+document.getElementById("saveCloak").onclick = () => {
+  const choice = presetSelect.value;
+  if(choice === "custom"){
+    const title = document.getElementById("customTitle").value || "New Tab";
+    const file = document.getElementById("customIconUpload").files[0];
+    const url = document.getElementById("customIconURL").value;
+    if(file){
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCookie("dominum-cloak", JSON.stringify({title, icon: reader.result}));
+        applyCloak(title, reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else if(url){
+      setCookie("dominum-cloak", JSON.stringify({title, icon: url}));
+      applyCloak(title, url);
+    }
+  } else if(choice !== "none"){
+    const c = cloakPresets[choice];
+    setCookie("dominum-cloak", JSON.stringify(c));
+    applyCloak(c.title, c.icon);
+  } else {
+    setCookie("dominum-cloak", "");
+    applyCloak("Dominum", "");
+  }
+  alert("Tab cloak saved!");
+};
+
+(function(){
+  const cloakData = getCookie("dominum-cloak");
+  if(cloakData){
+    try {
+      const {title, icon} = JSON.parse(cloakData);
+      applyCloak(title, icon);
+    }catch(e){}
+  }
+})();
 
 loadTheme();
 </script>
