@@ -153,6 +153,7 @@ select option:checked {
       <option value="neon">Neon</option>
       <option value="darkred">Dark Red</option>
       <option value="dnv2">DNV2</option>
+      <option value="matrix">Matrix</option>
       <option value="custom">Custom</option>
     </select>
     <div id="custom-theme-inputs" style="display:none;margin-top:10px;">
@@ -277,6 +278,15 @@ const themes = {
         "--surface": "rgba(255, 0, 255, 0.05)",
         "--border": "rgba(255, 0, 255, 0.15)",
         "--card-bg": "rgba(15, 0, 30, 0.7)"
+    },
+    matrix: {
+        "--bg": "#001100",
+        "--accent": "#00ff00",
+        "--blue": "#33ff33",
+        "--text": "#99ff99",
+        "--surface": "rgba(0, 255, 0, 0.05)",
+        "--border": "rgba(0, 255, 0, 0.15)",
+        "--card-bg": "rgba(0, 50, 0, 0.7)"
     }
 };
 
