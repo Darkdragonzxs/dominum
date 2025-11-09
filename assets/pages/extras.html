@@ -96,6 +96,7 @@
   <button class="extras-btn" onclick="openModal('partners-modal')"><i class="fa-solid fa-handshake"></i> Partners</button>
   <button class="extras-btn" onclick="openModal('vortex-modal')"><i class="fa-solid fa-comments"></i> Vortex Chat</button>
   <button class="extras-btn" onclick="openEaglerLauncher()"><i class="fa-solid fa-rocket"></i> Eagler Launcher</button>
+  <button class="extras-btn" onclick="openGamePorts()"><i class="fa-solid fa-gamepad"></i> Game Ports</button>
 </div>
 <div class="modal" id="credits-modal">
   <div class="modal-content">
@@ -549,6 +550,14 @@ function openEaglerLauncher() {
     window.parent.document.getElementById("content-frame").src = "/assets/pages/eagl3r-launcher.html";
   } else {
     window.location.href = "/assets/pages/eagl3r-launcher.html";
+  }
+}
+
+function openGamePorts() {
+  if (window.parent && window.parent.document.getElementById("content-frame")) {
+    window.parent.document.getElementById("content-frame").src = "/assets/pages/gam3-ports.html";
+  } else {
+    window.location.href = "/assets/pages/gam3-ports.html";
   }
 }
 </script>

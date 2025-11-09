@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Ports</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #6f42c1;
+    --primary-hover: #5936a6;
+    --accent: #f6c90e;
+    --text: #e6e6fa;
+    --bg: #1a1030;
+    --border: #3b2a65;
+    --radius: 12px;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  #searchBar {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.875rem 1rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  #searchBar:focus {
+    background: #fff;
+    color: var(--bg);
+  }
+
+  #container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .game-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .game-item:hover {
+    transform: translateY(-4px);
+  }
+
+  .game-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .game-item button {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    padding: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  #fullscreenOverlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    flex-direction: column;
+    z-index: 2000;
+  }
+
+  #fullscreenHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+  }
+
+  .header-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  #zoneFullscreenFrame {
+    flex: 1;
+    width: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+
+<input type="text" id="searchBar" placeholder="Search game ports..." oninput="filterGames()">
+<div id="container"></div>
+
+<div id="fullscreenOverlay">
+  <div id="fullscreenHeader">
+    <h2 id="gameTitle">Game</h2>
+    <div>
+      <button id="fullscreenBtn" class="header-btn" title="Fullscreen"><i class="fas fa-expand"></i></button>
+      <button id="closeFullscreen" class="header-btn" title="Close"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+  <iframe id="zoneFullscreenFrame"></iframe>
+</div>
+
+<script>
+const coverBase = "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main/covers";
+const htmlBase  = "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main";
+
+const games = [
+  {
+    name: "Level UP - Mario's Minigame Madness",
+    cover: `${coverBase}/LvL-Up-MMM.png`,
+    url: `${htmlBase}/Level-UP-MMM/index.html`
+  },
+  {
+    name: "NSMB Mario vs Luigi Online",
+    cover: `${coverBase}/NSMB-M-v-L.png`,
+    url: `${htmlBase}/Mario-vs-Luigi/index.html`
+  }
+];
+
+const container = document.getElementById('container');
+const overlay = document.getElementById('fullscreenOverlay');
+const iframe = document.getElementById('zoneFullscreenFrame');
+const gameTitle = document.getElementById('gameTitle');
+
+function loadGames(list = games) {
+  container.innerHTML = '';
+  list.forEach(game => {
+    const item = document.createElement('div');
+    item.className = 'game-item';
+    item.onclick = () => openGame(game);
+
+    const img = document.createElement('img');
+    img.src = game.cover;
+    img.alt = game.name;
+
+    const btn = document.createElement('button');
+    btn.textContent = game.name;
+
+    item.appendChild(img);
+    item.appendChild(btn);
+    container.appendChild(item);
+  });
+}
+
+function filterGames() {
+  const query = document.getElementById('searchBar').value.toLowerCase();
+  const filtered = games.filter(g => g.name.toLowerCase().includes(query));
+  loadGames(filtered);
+}
+
+function openGame(game) {
+  overlay.style.display = 'flex';
+  gameTitle.textContent = game.name;
+  iframe.src = game.url;
+}
+
+document.getElementById('closeFullscreen').onclick = () => {
+  overlay.style.display = 'none';
+  iframe.src = '';
+};
+
+document.getElementById('fullscreenBtn').onclick = () => {
+  iframe.requestFullscreen().catch(() => alert('Fullscreen not supported.'));
+};
+
+loadGames();
+</script>
+<script>
+const root = document.documentElement;
+const themes = {
+  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
+           "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
+  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
+         "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
+  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
+          "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
+  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
+        "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
+  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
+           "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
+  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
+         "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
+  matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
+         "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+};
+
+function applyTheme(theme){
+  Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
+}
+
+(function(){
+  const name = localStorage.getItem("dominum-theme") || "default";
+  if(name === "custom"){
+    const custom = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
+    applyTheme(custom);
+  } else applyTheme(themes[name]);
+})();
+</script>
+</body>
+</html>
