@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Ports</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
   :root {
     --primary: #6f42c1;
@@ -35,12 +34,13 @@
     color: var(--text);
     font-size: 15px;
     outline: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   #searchBar:focus {
     background: #fff;
     color: var(--bg);
+    transform: translateY(-1px);
   }
 
   #container {
@@ -50,32 +50,36 @@
     margin-top: 1rem;
   }
 
-  .game-item {
-    background: rgba(255,255,255,0.05);
+  .zone-item {
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
   }
-  .game-item:hover {
+
+  .zone-item:hover {
     transform: translateY(-4px);
   }
 
-  .game-item img {
+  .zone-item img {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
+    display: block;
   }
 
-  .game-item button {
-    width: 100%;
+  .zone-item button {
+    padding: 0.75rem;
     border: none;
     background: transparent;
     color: var(--text);
-    padding: 0.75rem;
     font-weight: 600;
     cursor: pointer;
+    width: 100%;
   }
 
   #fullscreenOverlay {
@@ -85,6 +89,8 @@
     display: none;
     flex-direction: column;
     z-index: 2000;
+    height: 100vh;
+    width: 100vw;
   }
 
   #fullscreenHeader {
@@ -102,6 +108,12 @@
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
+    margin-left: 0.5rem;
+  }
+
+  #gameTitle {
+    margin: 0;
+    font-size: 1.2rem;
   }
 
   #zoneFullscreenFrame {
@@ -112,86 +124,176 @@
 </style>
 </head>
 <body>
-
-<input type="text" id="searchBar" placeholder="Search game ports..." oninput="filterGames()">
-<div id="container"></div>
+<input type="text" id="searchBar" placeholder="Search game ports..." oninput="filterZones()">
+<div id="container">Loading...</div>
 
 <div id="fullscreenOverlay">
   <div id="fullscreenHeader">
-    <h2 id="gameTitle">Game</h2>
+    <h2 id="gameTitle">Game Title</h2>
     <div>
-      <button id="fullscreenBtn" class="header-btn" title="Fullscreen"><i class="fas fa-expand"></i></button>
-      <button id="closeFullscreen" class="header-btn" title="Close"><i class="fas fa-times"></i></button>
+      <button id="fullscreenBtn" class="header-btn" title="Fullscreen">
+        <i class="fas fa-expand"></i>
+      </button>
+      <button id="closeFullscreen" class="header-btn" title="Close">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
   </div>
   <iframe id="zoneFullscreenFrame"></iframe>
 </div>
 
 <script>
-const coverBase = "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main/covers";
-const htmlBase  = "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main";
-
-const games = [
-  {
-    name: "Level UP - Mario's Minigame Madness",
-    cover: `${coverBase}/LvL-Up-MMM.png`,
-    url: `${htmlBase}/Level-UP-MMM/index.html`
-  },
-  {
-    name: "NSMB Mario vs Luigi Online",
-    cover: `${coverBase}/NSMB-M-v-L.png`,
-    url: `${htmlBase}/Mario-vs-Luigi/index.html`
-  }
-];
-
 const container = document.getElementById('container');
+const searchBar = document.getElementById('searchBar');
 const overlay = document.getElementById('fullscreenOverlay');
 const iframe = document.getElementById('zoneFullscreenFrame');
+const closeBtn = document.getElementById('closeFullscreen');
 const gameTitle = document.getElementById('gameTitle');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 
-function loadGames(list = games) {
+const zonesURLs = [
+  "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main/game-ports.json"
+];
+
+const coverURL = "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main/covers";
+const htmlURL  = "https://cdn.jsdelivr.net/gh/DominumNetwork/game-ports@main";
+
+let zones = [];
+let zonesURL = zonesURLs[Math.floor(Math.random() * zonesURLs.length)];
+
+async function loadZones() {
+  try {
+    const response = await fetch(zonesURL);
+    zones = await response.json();
+    zones = zones.filter(zone => zone.id >= 0 && zone.id <= 9999);
+    displayZones();
+  } catch (e) {
+    container.innerHTML = 'Failed to load game ports.';
+    console.error(e);
+  }
+}
+
+function displayZones() {
   container.innerHTML = '';
-  list.forEach(game => {
+  zones.forEach(zone => {
     const item = document.createElement('div');
-    item.className = 'game-item';
-    item.onclick = () => openGame(game);
+    item.className = 'zone-item';
 
     const img = document.createElement('img');
-    img.src = game.cover;
-    img.alt = game.name;
+    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL);
+    img.alt = zone.name;
+    img.loading = 'lazy';
 
     const btn = document.createElement('button');
-    btn.textContent = game.name;
+    btn.textContent = zone.name;
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openZone(zone);
+    };
 
+    item.onclick = () => openZone(zone);
     item.appendChild(img);
     item.appendChild(btn);
     container.appendChild(item);
   });
+
+  const imgs = document.querySelectorAll('img[data-src]');
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        obs.unobserve(img);
+      }
+    });
+  }, { rootMargin: '100px', threshold: 0.1 });
+  imgs.forEach(i => observer.observe(i));
 }
 
-function filterGames() {
-  const query = document.getElementById('searchBar').value.toLowerCase();
-  const filtered = games.filter(g => g.name.toLowerCase().includes(query));
-  loadGames(filtered);
+function filterZones() {
+  const query = searchBar.value.toLowerCase();
+  const filtered = zones.filter(z => z.name.toLowerCase().includes(query));
+  displayFiltered(filtered);
 }
 
-function openGame(game) {
+function displayFiltered(filteredZones) {
+  container.innerHTML = '';
+  filteredZones.forEach(zone => {
+    const item = document.createElement('div');
+    item.className = 'zone-item';
+
+    const img = document.createElement('img');
+    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL);
+    img.alt = zone.name;
+    img.loading = 'lazy';
+
+    const btn = document.createElement('button');
+    btn.textContent = zone.name;
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openZone(zone);
+    };
+
+    item.onclick = () => openZone(zone);
+    item.appendChild(img);
+    item.appendChild(btn);
+    container.appendChild(item);
+  });
+
+  const imgs = document.querySelectorAll('img[data-src]');
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        obs.unobserve(img);
+      }
+    });
+  }, { rootMargin: '100px', threshold: 0.1 });
+  imgs.forEach(i => observer.observe(i));
+}
+
+async function openZone(zone) {
   overlay.style.display = 'flex';
-  gameTitle.textContent = game.name;
-  iframe.src = game.url;
+  gameTitle.textContent = zone.name;
+
+  const zoneUrl = zone.url;
+  if (!zoneUrl) {
+    alert('Game URL missing.');
+    return;
+  }
+
+  const isAbsolute = zoneUrl.startsWith('http');
+  if (isAbsolute) {
+    iframe.src = zoneUrl;
+  } else {
+    const fullUrl = zoneUrl.replace('{HTML_URL}', htmlURL);
+    try {
+      const response = await fetch(fullUrl);
+      const htmlContent = await response.text();
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const blobUrl = URL.createObjectURL(blob);
+      iframe.src = blobUrl;
+      iframe.onload = () => URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error('Blob load failed, falling back to direct URL:', e);
+      iframe.src = fullUrl;
+    }
+  }
 }
 
-document.getElementById('closeFullscreen').onclick = () => {
+closeBtn.onclick = () => {
   overlay.style.display = 'none';
   iframe.src = '';
 };
 
-document.getElementById('fullscreenBtn').onclick = () => {
+fullscreenBtn.onclick = () => {
   iframe.requestFullscreen().catch(() => alert('Fullscreen not supported.'));
 };
 
-loadGames();
+loadZones();
 </script>
+
 <script>
 const root = document.documentElement;
 const themes = {
