@@ -488,33 +488,18 @@ document.getElementById("saveCloak").onclick = () => {
 
 document.getElementById('exportData').onclick = function() {
     try {
-        const settingsData = {
-            "dominum-theme": localStorage.getItem("dominum-theme"),
-            "dominum-custom-theme": localStorage.getItem("dominum-custom-theme"),
-            "allCookies": document.cookie 
-        };
-        
-        const dataString = btoa(JSON.stringify(settingsData));
-        
-        const blob = new Blob([dataString], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'dominum-data.dnw';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-    } catch (error) {
-        console.error("Error exporting settings:", error);
-        alert("Failed to export settings.");
+        if (window.parent && window.parent.exportSettings) {
+            window.parent.exportSettings();
+        } else {
+            alert("Error: Could not find parent export function.");
+        }
+    } catch (e) {
+        console.error("Export failed:", e);
+        alert("Export failed. See console for details.");
     }
 };
 
 document.getElementById('importFile').onchange = function(event) {
-    
     const fileNameDisplay = document.getElementById('file-name-display');
     const file = event.target.files[0];
     
@@ -526,53 +511,27 @@ document.getElementById('importFile').onchange = function(event) {
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
-                const importedData = JSON.parse(atob(e.target.result));
-                
-                if (importedData["dominum-theme"] !== undefined) {
-                    localStorage.setItem("dominum-theme", importedData["dominum-theme"]);
+                if (window.parent && window.parent.importSettings) {
+                    window.parent.importSettings(e.target.result);
+                } else {
+                    alert("Error: Could not find parent import function.");
                 }
-                if (importedData["dominum-custom-theme"] !== undefined) {
-                    localStorage.setItem("dominum-custom-theme", importedData["dominum-custom-theme"]);
-                }
-                
-                if (importedData.allCookies) {
-                    const d = new Date();
-                    d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
-                    const expires = "expires=" + d.toUTCString();
-                    
-                    const cookies = importedData.allCookies.split(';');
-                    cookies.forEach(cookie => {
-                        const cookieString = cookie.trim();
-                        if (cookieString) {
-                            document.cookie = cookieString + ";" + expires + ";path=/";
-                        }
-                    });
-                }
-                
-                alert("Settings imported successfully! The page will now reload.");
-                event.target.value = null;
-                window.location.reload();
-
             } catch (error) {
                 console.error("Error importing settings:", error);
                 alert("Failed to import settings. The file may be corrupt or invalid.");
                 event.target.value = null;
-              
                 fileNameDisplay.textContent = 'No file chosen';
                 fileNameDisplay.style.fontStyle = 'italic';
                 fileNameDisplay.style.opacity = '0.7';
             }
         };
         reader.readAsText(file);
-
     } else {
         fileNameDisplay.textContent = 'No file chosen';
         fileNameDisplay.style.fontStyle = 'italic';
         fileNameDisplay.style.opacity = '0.7';
-        return;
     }
 };
-
 loadTheme();
 </script>
 </body>
