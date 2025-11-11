@@ -1,146 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eaglercraft Launcher</title>
-  <link rel="icon" type="image/x-icon" href="favicon.jpeg">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eaglercraft Launcher - Dominum</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0b0b0b;
-      color: #eee;
-      overflow-x: hidden;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    header {
-      text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, #111, #1a1a1a);
-      box-shadow: 0 0 30px #00b7ff55;
-      position: relative;
-      z-index: 2;
-    }
+<style>
+  :root {
+    --bg: #0b0a16;
+    --accent: #7a5cff;
+    --blue: #00bfff;
+    --text: #e6e6ff;
+    --surface: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.1);
+    --card-bg: rgba(255,255,255,0.03);
+  }
 
-    h1 {
-      color: #00b7ff;
-      text-shadow: 0 0 15px #00b7ff;
-    }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    .card-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 40px;
-      position: relative;
-      z-index: 1;
-    }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Orbitron', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+    width: 100vw;
+  }
 
-    .card {
-      background: rgba(25, 25, 25, 0.9);
-      border-radius: 12px;
-      box-shadow: 0 0 10px #00b7ff33;
-      padding: 20px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      backdrop-filter: blur(6px);
-    }
+  #particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 20px #00b7ffaa;
-    }
+  header {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--surface);
+    box-shadow: 0 0 30px var(--blue)55;
+    position: relative;
+    z-index: 2;
+  }
 
-    .card h3 {
-      color: #00b7ff;
-      margin-bottom: 10px;
-    }
+  h1 {
+    color: var(--blue);
+    text-shadow: 0 0 15px var(--blue);
+    font-size: 2.5em;
+  }
 
-    .btn {
-      background: none;
-      border: 2px solid #00b7ff;
-      color: #00b7ff;
-      padding: 10px 18px;
-      margin: 6px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: 'Orbitron', sans-serif;
-      transition: all 0.25s ease;
-    }
+  header p {
+    color: var(--text);
+    font-size: 1em;
+    margin-top: 10px;
+    opacity: 0.8;
+  }
 
-    .btn:hover {
-      background-color: #00b7ff;
-      color: #0b0b0b;
-      box-shadow: 0 0 10px #00b7ff;
-    }
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+  }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #888;
-      border-top: 1px solid #222;
-    }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 0 10px var(--blue)33;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(6px);
+  }
 
-    #embedModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(10, 10, 10, 0.95);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px var(--blue)aa;
+  }
 
-    #embedFrame {
-      width: 90%;
-      height: 80%;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 25px #00b7ffaa;
-    }
+  .card h3 {
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
 
-    .embed-controls {
-      position: absolute;
-      top: 15px;
-      right: 25px;
-      display: flex;
-      gap: 10px;
-    }
+  .btn {
+    background: none;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+    padding: 10px 18px;
+    margin: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
 
-    .embed-btn {
-      background: rgba(0, 183, 255, 0.1);
-      border: 2px solid #00b7ff;
-      color: #00b7ff;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+  .btn:hover {
+    background-color: var(--blue);
+    color: var(--bg);
+    box-shadow: 0 0 10px var(--blue);
+  }
+  
+  a.btn {
+      color: var(--blue);
+  }
+  
+  a.btn:hover {
+      color: var(--bg);
+  }
 
-    .embed-btn:hover {
-      background: #00b7ff;
-      color: #000;
-      box-shadow: 0 0 10px #00b7ff;
-    }
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: var(--surface);
+    color: var(--text);
+    opacity: 0.7;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+  
+  footer a {
+      color: var(--blue);
+  }
 
-    #particles-js {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      background: #0b0b0b;
-    }
-  </style>
+  #embedModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #embedFrame {
+    width: 90%;
+    height: 80%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 0 25px var(--blue)aa;
+  }
+
+  .embed-controls {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .embed-btn {
+    background: var(--blue)1a;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .embed-btn:hover {
+    background: var(--blue);
+    color: var(--bg);
+    box-shadow: 0 0 10px var(--blue);
+  }
+
+</style>
 </head>
 <body>
 
@@ -155,85 +202,85 @@
     <div class="card">
       <h3>DragonXShadow</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/DragonXShadow.html')">Play</button>
-      <a href="/assets/eagler-versions/DragonXShadow.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/DragonXShadow.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>DragonX V4</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/DragonX_V4.html')">Play</button>
-      <a href="/assets/eagler-versions/DragonX_V4.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/DragonX_V4.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>EaglerReborn</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/EaglerReborn.html')">Play</button>
-      <a href="/assets/eagler-versions/EaglerReborn.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/EaglerReborn.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Minecraft 1.0.3</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/Minecraft 1.0.3.html')">Play</button>
-      <a href="/assets/eagler-versions/Minecraft 1.0.3.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/Minecraft 1.0.3.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Minecraft 1.5.2</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/Minecraft 1.5.2.html')">Play</button>
-      <a href="/assets/eagler-versions/Minecraft 1.5.2.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/Minecraft 1.5.2.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Oddfuture Client</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/OddFutureClient.html')">Play</button>
-      <a href="/assets/eagler-versions/OddFutureClient.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/OddFutureClient.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Pi Client</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/PiClient.html')">Play</button>
-      <a href="/assets/eagler-versions/PiClient.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/PiClient.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Precision Client</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/PrecisionClient (1).html')">Play</button>
-      <a href="/assets/eagler-versions/PrecisionClient (1).html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/PrecisionClient (1).html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Shadow Client 3.0 Beta</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/ShadowClient30Beta.html')">Play</button>
-      <a href="/assets/eagler-versions/ShadowClient30Beta.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/ShadowClient30Beta.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Eagler 1.5</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/eagler1.5.html')">Play</button>
-      <a href="/assets/eagler-versions/eagler1.5.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/eagler1.5.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Eagler 1.8.8</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/eaglercraft.1.8.8.html')">Play</button>
-      <a href="/assets/eagler-versions/eaglercraft.1.8.8.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/eaglercraft.1.8.8.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>FuchsiaX Client</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/fuchsiax.html')">Play</button>
-      <a href="/assets/eagler-versions/fuchsiax.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/fuchsiax.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Kerosene Client</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/kerosene.html')">Play</button>
-      <a href="/assets/eagler-versions/kerosene.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/kerosene.html" download class="btn">Download</a>
     </div>
 
     <div class="card">
       <h3>Nit client</h3>
       <button class="btn" onclick="openEmbed('/assets/eagler-versions/nitclient.html')">Play</button>
-      <a href="/assets/eagler-versions/nitclient.html" download><button class="btn">Download</button></a>
+      <a href="/assets/eagler-versions/nitclient.html" download class="btn">Download</a>
     </div>
   </section>
 
@@ -242,37 +289,95 @@
       <button class="embed-btn" onclick="toggleFullscreen()">Fullscreen</button>
       <button class="embed-btn" onclick="closeEmbed()">Close</button>
     </div>
-    <iframe id="embedFrame"></iframe>
+    <iframe id="embedFrame" allowfullscreen></iframe>
   </div>
 
   <footer>
-    <p>CREDITS TO Scribbler#1095 | Discord: <a href="https://discord.gg/XaH4T6E2gH" style="color:#00b7ff;">Join</a></p>
+    <p>CREDITS TO Scribbler#1095 | Discord: <a href="https://discord.gg/XaH4T6E2gH">Join</a></p>
   </footer>
+
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {"value": 60, "density": {"enable": true, "value_area": 800}},
-        "color": {"value": "#00b7ff"},
-        "shape": {"type": "circle"},
-        "opacity": {"value": 0.4, "random": true},
-        "size": {"value": 3, "random": true},
-        "move": {"enable": true, "speed": 2, "direction": "none", "out_mode": "out"}
-      },
-      "interactivity": {
-        "events": {"onhover": {"enable": true, "mode": "repulse"}},
-        "modes": {"repulse": {"distance": 100}}
-      },
-      "retina_detect": true
-    });
+    const root = document.documentElement;
+    const themes = {
+      default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
+              "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
+      cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
+            "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
+      sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
+              "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
+      neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
+            "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
+      darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
+              "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
+      dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
+            "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
+      matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
+              "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+    };
+    
+    function initParticles(theme) {
+        const accent = theme["--accent"] || "#7a5cff";
+        const blue = theme["--blue"] || "#00bfff";
+        
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            window.pJSDom[0].pJS.fn.vendors.destroypJS();
+            window.pJSDom = [];
+        }
 
-function openEmbed(url) {
-  const modal = document.getElementById("embedModal");
-  const frame = document.getElementById("embedFrame");
-  frame.src = url;
-  modal.style.display = "flex";
-}
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 60 },
+                "color": { "value": [accent, blue] }, 
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                 "line_linked":{
+                    "enable":true, "distance":130, 
+                    "color": accent,
+                    "opacity":0.2, "width":1
+                },
+                "move": { "enable": true, "speed": 1.2, "direction": "none", "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "repulse" } },
+                "modes": { "repulse": { "distance": 100 } }
+            },
+            "retina_detect": true
+        });
+    }
+
+    function applyTheme(theme) {
+      let fullTheme = theme;
+      if (!theme["--surface"]) {
+          fullTheme = { ...themes.default, ...theme };
+      }
+      Object.entries(fullTheme).forEach(([k,v])=>root.style.setProperty(k,v));
+      initParticles(fullTheme);
+    }
+
+    (function(){
+      const name = localStorage.getItem("dominum-theme") || "default";
+      let themeToApply = themes[name] || themes['default'];
+
+      if(name === "custom"){
+        try {
+            const custom = JSON.parse(localStorage.getItem("dominum-custom-theme"));
+            if (custom) {
+                themeToApply = { ...themes.default, ...custom };
+            }
+        } catch(e) {}
+      }
+      applyTheme(themeToApply);
+    })();
+    
+    function openEmbed(url) {
+      const modal = document.getElementById("embedModal");
+      const frame = document.getElementById("embedFrame");
+      frame.src = url;
+      modal.style.display = "flex";
+    }
 
     function closeEmbed() {
       const modal = document.getElementById("embedModal");
