@@ -103,109 +103,103 @@
   <iframe id="content-frame" src="assets/pages/home.html"></iframe>
 
 <script>
-function loadPage(page) {
-  const frame = document.getElementById("content-frame");
-  
-  frame.style.opacity = 0;
-  
-  setTimeout(() => {
-    frame.src = `assets/pages/${page}.html`;
-    frame.onload = () => {
-      frame.style.opacity = 1;
-    };
-  }, 300);
-}
-
-const currentUrl = window.location.href;
-    document.getElementById('og-url').setAttribute('content', currentUrl);
-    document.getElementById('twitter-url').setAttribute('content', currentUrl);
-</script>
-
-<script>
-  const root=document.documentElement;
-const themes={
-  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
-           "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
-  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
-         "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
-  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
-          "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
-  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
-        "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
-  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
-           "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
-         "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
-  matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
-         "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
-};
-
-function loadPage(page){
-  const frame=document.getElementById("content-frame");
-  frame.src=`assets/pages/${page}.html`;
-}
-
-function applyTheme(theme){
-  Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));
-  const frame=document.getElementById("content-frame");
-  try {
-    Object.entries(theme).forEach(([v,k])=>frame.contentWindow.document.documentElement.style.setProperty(v,k));
-  } catch(e){}
-}
-
-function loadTheme(){
-  const name=localStorage.getItem("dominum-theme")||"default";
-  if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
-    applyTheme(t);
-  }else applyTheme(themes[name]);
-}
-
-  if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
-    Object.entries(t).forEach(([v,k])=>root.style.setProperty(v,k));
-  }else Object.entries(themes[name]).forEach(([v,k])=>root.style.setProperty(v,k));
-
-loadTheme();
-</script>
-<script>
-(function(){
-  function getCookie(name){
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
-
-  const cloakData = getCookie("dominum-cloak");
-  if (cloakData) {
-    try {
-      const { title, icon } = JSON.parse(cloakData);
-      if (title) document.title = title;
-      if (icon) {
-        let link = document.querySelector("link[rel='icon']") || document.createElement("link");
-        link.rel = "icon";
-        link.href = icon;
-        document.head.appendChild(link);
-      }
-    } catch (e) {
-      console.warn("Invalid cloak data:", e);
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? decodeURIComponent(match[2]) : null;
     }
-  }
-
-  document.addEventListener("keydown", e => {
-    const key = (getCookie("dominum-panic-key") || "`").toLowerCase();
-    const link = getCookie("dominum-panic-link") || "https://google.com/";
-    if (e.key.toLowerCase() === key) {
-      window.location.href = link;
-    }
-  });
-})();
-  
-function setCookie(name, value, days = 365) {
+    
+    function setCookie(name, value, days = 365) {
         const d = new Date();
         d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
         document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
     }
 
+    function loadPage(page) {
+        const frame = document.getElementById("content-frame");
+        frame.style.opacity = 0;
+        
+        setTimeout(() => {
+            frame.src = `assets/pages/${page}.html`;
+            frame.onload = () => {
+                frame.style.opacity = 1;
+                loadTheme(); 
+            };
+        }, 300);
+    }
+
+    const currentUrl = window.location.href;
+    document.getElementById('og-url').setAttribute('content', currentUrl);
+    document.getElementById('twitter-url').setAttribute('content', currentUrl);
+
+    const root = document.documentElement;
+    const themes = {
+      default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
+              "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
+      cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
+            "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
+      sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
+              "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
+      neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
+            "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
+      darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
+              "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
+      dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
+            "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
+      matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
+              "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+    };
+
+    function applyTheme(theme) {
+        Object.entries(theme).forEach(([k, v]) => root.style.setProperty(k, v));
+        
+        const frame = document.getElementById("content-frame");
+        if (frame && frame.contentWindow) {
+            try {
+                Object.entries(theme).forEach(([k, v]) => frame.contentWindow.document.documentElement.style.setProperty(k, v));
+            } catch (e) {}
+        }
+    }
+
+    function loadTheme() {
+        const name = localStorage.getItem("dominum-theme") || "default";
+        let themeToApply = themes[name] || themes['default'];
+
+        if (name === "custom") {
+            try {
+                const custom = JSON.parse(localStorage.getItem("dominum-custom-theme"));
+                if (custom) {
+                    themeToApply = { ...themes.default, ...custom }; 
+                }
+            } catch (e) {
+                console.error("Failed to parse custom theme", e);
+                themeToApply = themes['default'];
+            }
+        }
+        applyTheme(themeToApply);
+    }
+    (function() {
+        const cloakData = getCookie("dominum-cloak");
+        if (cloakData) {
+            try {
+                const { title, icon } = JSON.parse(cloakData);
+                if (title) document.title = title;
+                if (icon) {
+                    let link = document.querySelector("link[rel='icon']") || document.createElement("link");
+                    link.rel = "icon";
+                    link.href = icon;
+                    document.head.appendChild(link);
+                }
+            } catch (e) { console.warn("Invalid cloak data:", e); }
+        }
+
+        document.addEventListener("keydown", e => {
+            const key = (getCookie("dominum-panic-key") || "`").toLowerCase();
+            const link = getCookie("dominum-panic-link") || "https://google.com/";
+            if (e.key.toLowerCase() === key) {
+                window.location.href = link;
+            }
+        });
+    })();
     function exportSettings() {
         try {
             const settingsData = {
@@ -265,6 +259,7 @@ function setCookie(name, value, days = 365) {
             alert("Failed to import settings. The file may be corrupt or invalid.");
         }
     }
+    loadTheme();
 </script>
 </body>
 </html>
