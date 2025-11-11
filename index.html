@@ -199,6 +199,72 @@ loadTheme();
     }
   });
 })();
+  
+function setCookie(name, value, days = 365) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+    }
+
+    function exportSettings() {
+        try {
+            const settingsData = {
+                "dominum-theme": localStorage.getItem("dominum-theme"),
+                "dominum-custom-theme": localStorage.getItem("dominum-custom-theme"),
+                "allCookies": document.cookie
+            };
+            
+            const dataString = btoa(JSON.stringify(settingsData));
+            const blob = new Blob([dataString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dominum-settings.dnw';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error("Error exporting settings:", error);
+            alert("Failed to export settings.");
+        }
+    }
+
+    function importSettings(dataString) {
+        try {
+            const importedData = JSON.parse(atob(dataString));
+            
+            if (importedData["dominum-theme"] !== undefined) {
+                localStorage.setItem("dominum-theme", importedData["dominum-theme"]);
+            }
+            if (importedData["dominum-custom-theme"] !== undefined) {
+                localStorage.setItem("dominum-custom-theme", importedData["dominum-custom-theme"]);
+            }
+            
+            if (importedData.allCookies) {
+                const d = new Date();
+                d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + d.toUTCString();
+
+                const cookies = importedData.allCookies.split(';');
+                cookies.forEach(cookie => {
+                    const cookieString = cookie.trim();
+                    if (cookieString) {
+                        document.cookie = cookieString + ";" + expires + ";path=/";
+                    }
+                });
+            }
+            
+            alert("Settings imported successfully! The page will now reload.");
+            window.location.reload();
+
+        } catch (error) {
+            console.error("Error importing settings:", error);
+            alert("Failed to import settings. The file may be corrupt or invalid.");
+        }
+    }
 </script>
 </body>
 </html>
