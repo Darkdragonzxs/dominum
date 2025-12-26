@@ -97,6 +97,7 @@
   <button class="extras-btn" onclick="openModal('vortex-modal')"><i class="fa-solid fa-comments"></i> Vortex Chat</button>
   <button class="extras-btn" onclick="openEaglerLauncher()"><i class="fa-solid fa-rocket"></i> Eagler Launcher</button>
   <button class="extras-btn" onclick="openGamePorts()"><i class="fa-solid fa-gamepad"></i> Game Ports</button>
+  <button class="extras-btn" onclick="openDataGen()"><i class="fa-solid fa-code"></i> Data URL Generator</button>
 </div>
 <div class="modal" id="credits-modal">
   <div class="modal-content">
@@ -432,36 +433,46 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-particlesJS("particles-js", {
-  "particles": {
-    "number": { "value": 60 },
-    "color": { "value": ["#7a5cff", "#00bfff"] },
-    "shape": { "type": "circle" },
-    "opacity": { "value": 0.5 },
-    "size": { "value": 2 },
-    "line_linked": {
-      "enable": true,
-      "distance": 130,
-      "color": "#7a5cff",
-      "opacity": 0.2,
-      "width": 1
-    },
-    "move": {
-      "enable": true,
-      "speed": 1.2,
-      "direction": "none",
-      "out_mode": "out"
-    }
-  },
-  "interactivity": {
-    "events": {
-      "onhover": { "enable": true, "mode": "repulse" },
-      "onclick": { "enable": false }
-    },
-    "modes": { "repulse": { "distance": 100 } }
-  },
-  "retina_detect": true
-});
+(function() {
+      const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
+      const particlesContainer = document.getElementById('particles-js');
+
+      if (particlesEnabled) {
+        particlesContainer.style.display = 'block';
+        particlesJS("particles-js", {
+          "particles": {
+            "number": { "value": 60 },
+            "color": { "value": ["#7a5cff", "#00bfff"] },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5 },
+            "size": { "value": 2 },
+            "line_linked": {
+              "enable": true,
+              "distance": 130,
+              "color": "#7a5cff",
+              "opacity": 0.2,
+              "width": 1
+            },
+            "move": {
+              "enable": true,
+              "speed": 1.2,
+              "direction": "none",
+              "out_mode": "out"
+            }
+          },
+          "interactivity": {
+            "events": {
+              "onhover": { "enable": true, "mode": "repulse" },
+              "onclick": { "enable": false }
+            },
+            "modes": { "repulse": { "distance": 100 } }
+          },
+          "retina_detect": true
+        });
+      } else {
+        particlesContainer.style.display = 'none';
+      }
+    })();
 </script>
 <script>
 let currentPartner={};
@@ -558,6 +569,14 @@ function openGamePorts() {
     window.parent.document.getElementById("content-frame").src = "/assets/pages/gam3-ports.html";
   } else {
     window.location.href = "/assets/pages/gam3-ports.html";
+  }
+}
+
+function openDataGen() {
+  if (window.parent && window.parent.document.getElementById("content-frame")) {
+    window.parent.document.getElementById("content-frame").src = "/assets/pages/data-generator.html";
+  } else {
+    window.location.href = "/assets/pages/data-generator.html";
   }
 }
 </script>

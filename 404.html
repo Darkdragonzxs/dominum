@@ -11,11 +11,18 @@
     box-sizing: border-box;
   }
 
+  :root {
+    --bg: #0b0a16;
+    --accent: #7a5cff;
+    --blue: #00bfff;
+    --text: #e6e6ff;
+  }
+
   body {
     margin: 0;
     padding: 0;
-    background: #0b0a16;
-    color: #e6e6ff;
+    background: var(--bg);
+    color: var(--text);
     font-family: 'Orbitron', sans-serif;
     height: 100vh;
     overflow: hidden;
@@ -40,12 +47,12 @@
 
   h1 {
     font-size: 6em;
-    color: #7a5cff;
+    color: var(--text);
     margin: 0;
   }
 
   h2 {
-    color: #00bfff;
+    color: var(--text);
     font-size: 1.5em;
     margin-top: 10px;
     opacity: 0.8;
@@ -54,33 +61,38 @@
   p {
     margin-top: 20px;
     font-size: 1em;
-    color: #7a5cff;
+    color: var(--text);
     opacity: 0.8;
   }
 
   .buttons {
-    margin-top: 30px;
+    margin-top: 40px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
   }
 
-  a, button {
-    padding: 10px 20px;
-    font-size: 1em;
-    font-family: 'Orbitron', sans-serif;
-    color: #0b0a16;
-    background: linear-gradient(90deg, #7a5cff, #00bfff);
-    border: none;
-    border-radius: 8px;
+  button {
+    padding: 10px 22px;
+    border: 1px solid var(--accent);
+    border-radius: 30px;
+    color: var(--accent);
     text-decoration: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  a:hover, button:hover {
-    transform: scale(1.1);
+  button:hover {
+    color: var(--blue);
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px var(--blue);
   }
 </style>
 </head>
@@ -95,29 +107,72 @@
   <p>if you were using the proxy, just press reload.</p>
   <div class="buttons">
     <button onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> Reload</button>
-    <a href="/assets/pages/home.html"><i class="fa-solid fa-house"></i> Return Home</a>
+    <button onclick="openPageHome()"><i class="fa-solid fa-house"></i> Return Home</button>
   </div>
 </div>
-<!-- particles! yay! -->
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script>
-particlesJS("particles-js", {
-  "particles": {
-    "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-    "color": { "value": ["#7a5cff", "#00bfff"] },
-    "shape": { "type": "circle" },
-    "opacity": { "value": 0.5 },
-    "size": { "value": 3 },
-    "move": { "enable": true, "speed": 2 }
-  },
-  "interactivity": {
-    "events": {
-      "onhover": { "enable": true, "mode": "repulse" }
-    }
-  },
-  "retina_detect": true
-});
-</script>
+(function() {
+      const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
+      const particlesContainer = document.getElementById('particles-js');
 
+      if (particlesEnabled) {
+        particlesContainer.style.display = 'block';
+        particlesJS("particles-js", {
+          "particles": {
+            "number": { "value": 60 },
+            "color": { "value": ["#7a5cff", "#00bfff"] },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5 },
+            "size": { "value": 2 },
+            "line_linked": {
+              "enable": true,
+              "distance": 130,
+              "color": "#7a5cff",
+              "opacity": 0.2,
+              "width": 1
+            },
+            "move": {
+              "enable": true,
+              "speed": 1.2,
+              "direction": "none",
+              "out_mode": "out"
+            }
+          },
+          "interactivity": {
+            "events": {
+              "onhover": { "enable": true, "mode": "repulse" },
+              "onclick": { "enable": false }
+            },
+            "modes": { "repulse": { "distance": 100 } }
+          },
+          "retina_detect": true
+        });
+      } else {
+        particlesContainer.style.display = 'none';
+      }
+    })();
+</script>
+<script>
+  function applyTheme(theme){
+  Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
+}
+
+(function(){
+  const name = localStorage.getItem("dominum-theme") || "default";
+  if(name === "custom"){
+    const custom = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
+    applyTheme(custom);
+  } else applyTheme(themes[name]);
+})();
+
+function openHomePage() {
+  if (window.parent && window.parent.document.getElementById("content-frame")) {
+    window.parent.document.getElementById("content-frame").src = "/assets/pages/home.html";
+  } else {
+    window.location.href = "/assets/pages/home.html";
+  }
+}
+</script>
 </body>
 </html>
