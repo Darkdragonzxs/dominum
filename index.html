@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dominum</title>
+<link rel="icon" href="/assets/images/transparent-dominum.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<meta name="description" content="A proxy site with many promising features :D - Also Fish" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="" id="og-url" />
+<meta property="og:title" content="Dominum" />
+<meta property="og:description" content="A proxy site with many promising features :D - Also Fish" />
+<meta property="og:image" content="/assets/images/transparent-dominum.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="" id="twitter-url" />
+<meta name="twitter:title" content="Dominum" />
+<meta name="twitter:description" content="A proxy site with many promising features :D - Also Fish" />
+<meta name="twitter:image" content="/assets/images/transparent-dominum.png" />
+
+<style>
+  :root {
+    --bg: #0b0a16;
+    --accent: #7a5cff;
+    --blue: #00bfff;
+    --text: #e6e6ff;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+  }
+
+  aside {
+    width: 70px;
+    background: rgba(255, 255, 255, 0.03);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 0;
+  }
+
+  .sidebar-top,
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  aside i {
+    font-size: 1.4em;
+    cursor: pointer;
+    color: var(--text);
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  aside i:hover {
+    color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  iframe {
+    flex: 1;
+    border: none;
+    width: 100%;
+    height: 100vh;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+</style>
+</head>
+<body>
+
+  <aside>
+    <div class="sidebar-top">
+      <i class="fa-solid fa-house" title="Home" onclick="loadPage('home')"></i>
+      <i class="fa-solid fa-gamepad" title="Games" onclick="loadPage('games')"></i>
+      <i class="fa-solid fa-box-archive" title="Apps" onclick="loadPage('apps')"></i>
+      <i class="fa-solid fa-magnifying-glass" title="Search" onclick="loadPage('search')"></i>
+      <i class="fa-solid fa-gear" title="Settings" onclick="loadPage('settings')"></i>
+      <i class="fa-solid fa-plus" title="Extras" onclick="loadPage('extras')"></i>
+    </div>
+
+    <div class="sidebar-bottom">
+      <i class="fa-brands fa-discord" title="Discord" onclick="window.open('https://dsc.gg/dominum/', '_blank')"></i>
+    </div>
+  </aside>
+
+  <iframe id="content-frame" src="/src/assets/pages/home.html"></iframe>
+
+<script>
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? decodeURIComponent(match[2]) : null;
+    }
+    
+    function setCookie(name, value, days = 365) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+    }
+
+    function loadPage(page) {
+        const frame = document.getElementById("content-frame");
+        frame.style.opacity = 0;
+        
+        setTimeout(() => {
+            frame.src = `/src/assets/pages/${page}.html`;
+            frame.onload = () => {
+                frame.style.opacity = 1;
+                loadTheme(); 
+            };
+        }, 300);
+    }
+
+    const currentUrl = window.location.href;
+    document.getElementById('og-url').setAttribute('content', currentUrl);
+    document.getElementById('twitter-url').setAttribute('content', currentUrl);
+
+    const root = document.documentElement;
+    const themes = {
+      default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
+              "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
+      cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
+            "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
+      sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
+              "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
+      neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
+            "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
+      darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
+              "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
+      dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
+            "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
+      matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
+              "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+    };
+
+    function applyTheme(theme) {
+        Object.entries(theme).forEach(([k, v]) => root.style.setProperty(k, v));
+        
+        const frame = document.getElementById("content-frame");
+        if (frame && frame.contentWindow) {
+            try {
+                Object.entries(theme).forEach(([k, v]) => frame.contentWindow.document.documentElement.style.setProperty(k, v));
+            } catch (e) {}
+        }
+    }
+
+    function loadTheme() {
+        const name = localStorage.getItem("dominum-theme") || "default";
+        let themeToApply = themes[name] || themes['default'];
+
+        if (name === "custom") {
+            try {
+                const custom = JSON.parse(localStorage.getItem("dominum-custom-theme"));
+                if (custom) {
+                    themeToApply = { ...themes.default, ...custom }; 
+                }
+            } catch (e) {
+                console.error("Failed to parse custom theme", e);
+                themeToApply = themes['default'];
+            }
+        }
+        applyTheme(themeToApply);
+    }
+    (function() {
+        const cloakData = getCookie("dominum-cloak");
+        if (cloakData) {
+            try {
+                const { title, icon } = JSON.parse(cloakData);
+                if (title) document.title = title;
+                if (icon) {
+                    let link = document.querySelector("link[rel='icon']") || document.createElement("link");
+                    link.rel = "icon";
+                    link.href = icon;
+                    document.head.appendChild(link);
+                }
+            } catch (e) { console.warn("Invalid cloak data:", e); }
+        }
+
+        document.addEventListener("keydown", e => {
+            const key = (getCookie("dominum-panic-key") || "`").toLowerCase();
+            const link = getCookie("dominum-panic-link") || "https://google.com/";
+            if (e.key.toLowerCase() === key) {
+                window.location.href = link;
+            }
+        });
+    })();
+    function exportSettings() {
+        try {
+            const settingsData = {
+                "dominum-theme": localStorage.getItem("dominum-theme"),
+                "dominum-custom-theme": localStorage.getItem("dominum-custom-theme"),
+                "allCookies": document.cookie
+            };
+            
+            const dataString = btoa(JSON.stringify(settingsData));
+            const blob = new Blob([dataString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dominum-settings.dnw';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error("Error exporting settings:", error);
+            alert("Failed to export settings.");
+        }
+    }
+
+    function importSettings(dataString) {
+        try {
+            const importedData = JSON.parse(atob(dataString));
+            
+            if (importedData["dominum-theme"] !== undefined) {
+                localStorage.setItem("dominum-theme", importedData["dominum-theme"]);
+            }
+            if (importedData["dominum-custom-theme"] !== undefined) {
+                localStorage.setItem("dominum-custom-theme", importedData["dominum-custom-theme"]);
+            }
+            
+            if (importedData.allCookies) {
+                const d = new Date();
+                d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + d.toUTCString();
+
+                const cookies = importedData.allCookies.split(';');
+                cookies.forEach(cookie => {
+                    const cookieString = cookie.trim();
+                    if (cookieString) {
+                        document.cookie = cookieString + ";" + expires + ";path=/";
+                    }
+                });
+            }
+            
+            alert("Settings imported successfully! The page will now reload.");
+            window.location.reload();
+
+        } catch (error) {
+            console.error("Error importing settings:", error);
+            alert("Failed to import settings. The file may be corrupt or invalid.");
+        }
+    }
+    loadTheme();
+</script>
+</body>
+</html>
