@@ -557,11 +557,21 @@ loadTheme();
 </script>
 <script>
 function openEaglerLauncher() {
-  if (window.parent && window.parent.document.getElementById("content-frame")) {
-    window.parent.document.getElementById("content-frame").src = "/src/assets/pages/mc/index.html";
-  } else {
-    window.location.href = "/assets/pages/eagl3r-launcher.html";
-  }
+  const targetUrl = "/src/assets/pages/ampler-launcher.html"; 
+  
+  const newTab = window.open("about:blank", "_blank");
+
+  fetch(targetUrl)
+    .then(response => response.text())
+    .then(html => {
+      newTab.document.open();
+      newTab.document.write(html);
+      newTab.document.close();
+    })
+    .catch(err => {
+      console.error("Failed to load the launcher:", err);
+      newTab.location.href = targetUrl; 
+    });
 }
 
 function openGamePorts() {
