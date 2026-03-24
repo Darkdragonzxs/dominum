@@ -12,11 +12,11 @@
     --accent: #f6c90e;
     --text: #e6e6fa;
     --bg: #1a1030;
-    --border: #3b2a65;
-    --radius: 12px;
-    --card-bg: rgba(255,255,255,0.03);
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-    --shadow: 0 4px 12px rgba(0,0,0,0.3);
+    --border: rgba(255, 255, 255, 0.1);
+    --radius: 14px;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.2);
+    --shadow: 0 8px 30px rgba(0,0,0,0.5);
   }
 
   body {
@@ -24,39 +24,44 @@
     color: var(--text);
     font-family: 'Inter', sans-serif;
     margin: 0;
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .controls-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 1rem;
-    max-width: 800px;
+    gap: 12px;
+    margin-bottom: 2rem;
+    max-width: 900px;
   }
 
   .control-input {
-    padding: 0.875rem 1rem;
+    padding: 0.8rem 1.2rem;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(20px);
-    color: var(--text);
-    font-size: 15px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 14px;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: var(--shadow-sm);
   }
 
+  .control-input:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
   .control-input:focus {
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(252, 38, 81, 0.25), var(--shadow);
-    transform: translateY(-1px);
-    color: var(--bg);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(246, 201, 14, 0.2), var(--shadow);
+    transform: translateY(-2px);
   }
 
   #searchBar {
-    flex: 1 1 200px;
+    flex: 1 1 250px;
   }
   
   select.control-input {
@@ -65,14 +70,19 @@
   }
 
   select.control-input option {
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: #1a1a1a;
+    color: #fff;
   }
 
   #container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.2rem;
+  }
+
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.9) translateY(15px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
   }
 
   .zone-item {
@@ -83,65 +93,147 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    opacity: 0; 
+    animation: popIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
+
   .zone-item:hover {
-    transform: translateY(-4px);
-    background: var(--shadow);
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: var(--shadow);
+    border-color: rgba(255, 255, 255, 0.3);
+    z-index: 2;
   }
-  .zone-item img {
+
+  .img-wrapper {
     width: 100%;
     aspect-ratio: 1;
-    object-fit: cover;
-    display: block;
+    overflow: hidden;
     background-color: rgba(0,0,0,0.2);
   }
+
+  .zone-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .zone-item:hover img {
+    transform: scale(1.1);
+  }
+
   .zone-item button {
-    padding: 0.75rem;
+    padding: 0.9rem 0.5rem;
     border: none;
     background: transparent;
     color: var(--text);
     font-weight: 600;
+    font-size: 0.85rem;
     cursor: pointer;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s ease;
   }
 
-  #fullscreenOverlay {
+  .zone-item:hover button {
+    color: #fff;
+  }
+
+  #modalOverlay {
     position: fixed;
     inset: 0;
-    background: #000;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
     display: none;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     z-index: 2000;
-    height: 100vh;
-    width: 100vw;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease forwards;
   }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  #gameModal {
+    width: 100%;
+    max-width: 1100px;
+    height: 85vh;
+    background: var(--bg);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    transform: scale(0.95);
+    animation: modalPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes modalPop {
+    to { transform: scale(1); }
+  }
+
   #fullscreenHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background: rgba(0,0,0,0.6);
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border);
     color: #fff;
-    font-family: 'Inter', sans-serif;
   }
-  .header-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin-left: 0.5rem;
-  }
+
   #gameTitle {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
   }
+
+  .header-controls {
+    display: flex;
+    gap: 10px;
+  }
+
+  .header-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.6rem 0.9rem;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-btn:hover {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(246, 201, 14, 0.3);
+  }
+
+  .header-btn:active {
+    transform: translateY(0);
+  }
+
   #zoneFullscreenFrame {
     flex: 1;
     width: 100%;
     border: none;
-    background: #fff;
+    background: #000;
   }
 </style>
 </head>
@@ -163,19 +255,24 @@
 
 <div id="container">Loading games...</div>
 
-<div id="fullscreenOverlay">
-  <div id="fullscreenHeader">
-    <h2 id="gameTitle">Game Title</h2>
-    <div>
-      <button id="fullscreenBtn" class="header-btn" title="Fullscreen">
-        <i class="fas fa-expand"></i>
-      </button>
-      <button id="closeFullscreen" class="header-btn" title="Close">
-        <i class="fas fa-times"></i>
-      </button>
+<div id="modalOverlay">
+  <div id="gameModal">
+    <div id="fullscreenHeader">
+      <h2 id="gameTitle">Game Title</h2>
+      <div class="header-controls">
+        <button id="downloadBtn" class="header-btn" title="Download Game">
+          <i class="fas fa-download"></i>
+        </button>
+        <button id="fullscreenBtn" class="header-btn" title="Fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+        <button id="closeFullscreen" class="header-btn" title="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
+    <iframe id="zoneFullscreenFrame"></iframe>
   </div>
-  <iframe id="zoneFullscreenFrame"></iframe>
 </div>
 
 <script>
@@ -184,19 +281,21 @@ const searchBar = document.getElementById('searchBar');
 const sortSelect = document.getElementById('sortSelect');
 const providerSelect = document.getElementById('providerSelect');
 
-const overlay = document.getElementById('fullscreenOverlay');
+const overlay = document.getElementById('modalOverlay');
 const iframe = document.getElementById('zoneFullscreenFrame');
 const closeBtn = document.getElementById('closeFullscreen');
-const gameTitle = document.getElementById('gameTitle');
 const fullscreenBtn = document.getElementById('fullscreenBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const gameTitle = document.getElementById('gameTitle');
 
 const gnMathCoverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
 const gnMathHtmlURL = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
 
 let allGames = [];
+let currentGame = null; // Keeps track of the currently opened game for downloading
 
 async function loadProvider() {
-  container.innerHTML = 'Loading games...';
+  container.innerHTML = '<div style="width:100%; text-align:center; padding: 2rem; color: #888;">Fetching games...</div>';
   allGames = [];
   const provider = providerSelect.value;
 
@@ -242,7 +341,7 @@ async function loadProvider() {
 
   } catch (e) {
     console.error(e);
-    container.innerHTML = 'Failed to load games.';
+    container.innerHTML = '<div style="width:100%; text-align:center; padding: 2rem; color: #ff4444;">Failed to load games. Check console for details.</div>';
   }
 }
 
@@ -267,13 +366,19 @@ function applyFilters() {
 function displayGames(games) {
   container.innerHTML = '';
   if (games.length === 0) {
-    container.innerHTML = 'No games found.';
+    container.innerHTML = '<div style="width:100%; text-align:center; padding: 2rem; color: #888;">No games found.</div>';
     return;
   }
 
-  games.forEach(game => {
+  games.forEach((game, index) => {
     const item = document.createElement('div');
     item.className = 'zone-item';
+    
+    const delay = Math.min(index * 0.03, 1.5);
+    item.style.animationDelay = `${delay}s`;
+
+    const imgWrapper = document.createElement('div');
+    imgWrapper.className = 'img-wrapper';
 
     const img = document.createElement('img');
     img.dataset.src = game.cover;
@@ -289,7 +394,8 @@ function displayGames(games) {
       openGame(game);
     };
 
-    item.appendChild(img);
+    imgWrapper.appendChild(img);
+    item.appendChild(imgWrapper);
     item.appendChild(btn);
     container.appendChild(item);
   });
@@ -308,6 +414,7 @@ function displayGames(games) {
 }
 
 async function openGame(game) {
+  currentGame = game;
   overlay.style.display = 'flex';
   gameTitle.textContent = game.name;
 
@@ -329,10 +436,62 @@ async function openGame(game) {
   }
 }
 
+downloadBtn.onclick = async () => {
+  if (!currentGame) return;
+
+  let fileContent = "";
+  let fullUrl = currentGame.isAbsolute 
+      ? currentGame.url 
+      : currentGame.url.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL);
+
+  try {
+    const response = await fetch(fullUrl);
+    if (!response.ok) throw new Error("CORS or Network Error");
+    fileContent = await response.text();
+  } catch (error) {
+    console.log("Direct fetch blocked, generating wrapper HTML...");
+    fileContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${currentGame.name}</title>
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <iframe src="${fullUrl}" allowfullscreen="true"></iframe>
+</body>
+</html>`;
+  }
+
+  const blob = new Blob([fileContent], { type: 'text/html' });
+  const downloadUrl = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = `${currentGame.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.html`;
+  
+  document.body.appendChild(a);
+  a.click();
+  
+  document.body.removeChild(a);
+  URL.revokeObjectURL(downloadUrl);
+};
+
 closeBtn.onclick = () => {
   overlay.style.display = 'none';
   iframe.src = '';
+  currentGame = null;
 };
+
+overlay.onclick = (e) => {
+  if (e.target === overlay) {
+    closeBtn.click();
+  }
+}
 
 fullscreenBtn.onclick = () => {
   iframe.requestFullscreen().catch(() => {
