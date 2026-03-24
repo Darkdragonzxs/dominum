@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Games Library</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
   :root {
@@ -13,6 +14,9 @@
     --bg: #1a1030;
     --border: #3b2a65;
     --radius: 12px;
+    --card-bg: rgba(255,255,255,0.03);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+    --shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
 
   body {
@@ -23,11 +27,17 @@
     padding: 1rem;
   }
 
-  #searchBar {
-    width: 100%;
-    max-width: 500px;
+  .controls-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1rem;
+    max-width: 800px;
+  }
+
+  .control-input {
     padding: 0.875rem 1rem;
-    border: 0;
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(20px);
@@ -38,18 +48,31 @@
     box-shadow: var(--shadow-sm);
   }
 
-  #searchBar:focus {
+  .control-input:focus {
     background: #fff;
     box-shadow: 0 0 0 3px rgba(252, 38, 81, 0.25), var(--shadow);
     transform: translateY(-1px);
     color: var(--bg);
   }
 
+  #searchBar {
+    flex: 1 1 200px;
+  }
+  
+  select.control-input {
+    cursor: pointer;
+    flex: 0 1 auto;
+  }
+
+  select.control-input option {
+    background-color: var(--bg);
+    color: var(--text);
+  }
+
   #container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
-    margin-top: 1rem;
   }
 
   .zone-item {
@@ -71,6 +94,7 @@
     aspect-ratio: 1;
     object-fit: cover;
     display: block;
+    background-color: rgba(0,0,0,0.2);
   }
   .zone-item button {
     padding: 0.75rem;
@@ -82,48 +106,62 @@
     width: 100%;
   }
 
-#fullscreenOverlay {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  display: none;
-  flex-direction: column;
-  z-index: 2000;
-  height: 100vh;
-  width: 100vw;
-}
-#fullscreenHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  font-family: 'Inter', sans-serif;
-}
-
-.header-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-left: 0.5rem;
-}
-#gameTitle {
-  margin: 0;
-  font-size: 1.2rem;
-}
-#zoneFullscreenFrame {
-  flex: 1;
-  width: 100%;
-  border: none;
-}
+  #fullscreenOverlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    flex-direction: column;
+    z-index: 2000;
+    height: 100vh;
+    width: 100vw;
+  }
+  #fullscreenHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+  }
+  .header-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+  #gameTitle {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  #zoneFullscreenFrame {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: #fff;
+  }
 </style>
 </head>
 <body>
-<input type="text" id="searchBar" placeholder="Search games..." oninput="filterZones()">
-<div id="container">Loading...</div>
+
+<div class="controls-wrapper">
+  <select id="providerSelect" class="control-input" onchange="loadProvider()">
+    <option value="gn-math">GN-Math</option>
+    <option value="truffled">Truffled.lol</option>
+  </select>
+
+  <input type="text" id="searchBar" class="control-input" placeholder="Search games..." oninput="applyFilters()">
+  
+  <select id="sortSelect" class="control-input" onchange="applyFilters()">
+    <option value="a-z">A-Z</option>
+    <option value="z-a">Z-A</option>
+  </select>
+</div>
+
+<div id="container">Loading games...</div>
 
 <div id="fullscreenOverlay">
   <div id="fullscreenHeader">
@@ -143,136 +181,147 @@
 <script>
 const container = document.getElementById('container');
 const searchBar = document.getElementById('searchBar');
+const sortSelect = document.getElementById('sortSelect');
+const providerSelect = document.getElementById('providerSelect');
+
 const overlay = document.getElementById('fullscreenOverlay');
 const iframe = document.getElementById('zoneFullscreenFrame');
 const closeBtn = document.getElementById('closeFullscreen');
 const gameTitle = document.getElementById('gameTitle');
 const fullscreenBtn = document.getElementById('fullscreenBtn');
 
-const zonesURLs = [
-  "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json"
-];
+const gnMathCoverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
+const gnMathHtmlURL = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
 
-const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
-const htmlURL = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
+let allGames = [];
 
-let zones = [];
-let zonesURL = zonesURLs[Math.floor(Math.random() * zonesURLs.length)];
+async function loadProvider() {
+  container.innerHTML = 'Loading games...';
+  allGames = [];
+  const provider = providerSelect.value;
 
-async function loadZones() {
   try {
-    const response = await fetch(zonesURL);
-    zones = await response.json();
-    zones = zones.filter(zone => zone.id >= 0 && zone.id <= 5000);
-    displayZones();
+    if (provider === 'gn-math') {
+      const response = await fetch("https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json");
+      const rawZones = await response.json();
+      
+      allGames = rawZones.filter(z => z.id >= 0 && z.id <= 5000).map((z) => {
+        return {
+          name: z.name,
+          cover: z.cover.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL),
+          url: z.url,
+          isAbsolute: z.url.startsWith('http')
+        };
+      });
+
+    } else if (provider === 'truffled') {
+      const response = await fetch("https://cdn.jsdelivr.net/gh/aukak/truffled@main/public/js/json/g.json");
+      const data = await response.json();
+      
+      allGames = (data.games || []).map((g) => {
+        let gameUrl = g.url;
+        let thumb = g.thumbnail;
+        
+        if (!gameUrl.startsWith('http')) {
+            gameUrl = 'https://truffled.lol' + (gameUrl.startsWith('/') ? '' : '/') + gameUrl;
+        }
+        if (!thumb.startsWith('http')) {
+            thumb = 'https://truffled.lol' + (thumb.startsWith('/') ? '' : '/') + thumb;
+        }
+
+        return {
+          name: g.name,
+          cover: thumb,
+          url: gameUrl,
+          isAbsolute: true
+        };
+      });
+    }
+
+    applyFilters();
+
   } catch (e) {
-    container.innerHTML = 'Failed to load zones.';
+    console.error(e);
+    container.innerHTML = 'Failed to load games.';
   }
 }
 
-function displayZones() {
-  container.innerHTML = '';
-  zones.forEach(zone => {
-    const item = document.createElement('div');
-    item.className = 'zone-item';
-
-    const img = document.createElement('img');
-    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL);
-    img.alt = zone.name;
-    img.loading = 'lazy';
-
-    const btn = document.createElement('button');
-    btn.textContent = zone.name;
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      openZone(zone);
-    };
-    item.onclick = () => openZone(zone);
-    item.appendChild(img);
-    item.appendChild(btn);
-    container.appendChild(item);
-  });
-  const imgs = document.querySelectorAll('img[data-src]');
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const img = e.target;
-        img.src = img.dataset.src;
-        obs.unobserve(img);
-      }
-    });
-  }, { rootMargin: '100px', threshold: 0.1 });
-  imgs.forEach(i => observer.observe(i));
-}
-
-function filterZones() {
+function applyFilters() {
   const query = searchBar.value.toLowerCase();
-  const filtered = zones.filter(z => z.name.toLowerCase().includes(query));
-  displayFiltered(filtered);
-}
+  const sortMethod = sortSelect.value;
 
-function displayFiltered(filteredZones) {
-  container.innerHTML = '';
-  filteredZones.forEach(zone => {
-    const item = document.createElement('div');
-    item.className = 'zone-item';
+  let filtered = allGames.filter(g => g.name.toLowerCase().includes(query));
 
-    const img = document.createElement('img');
-    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL);
-    img.alt = zone.name;
-    img.loading = 'lazy';
-
-    const btn = document.createElement('button');
-    btn.textContent = zone.name;
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      openZone(zone);
-    };
-    item.onclick = () => openZone(zone);
-    item.appendChild(img);
-    item.appendChild(btn);
-    container.appendChild(item);
+  filtered.sort((a, b) => {
+    if (sortMethod === 'a-z') {
+      return a.name.localeCompare(b.name);
+    } else if (sortMethod === 'z-a') {
+      return b.name.localeCompare(a.name);
+    }
+    return 0;
   });
-  const imgs = document.querySelectorAll('img[data-src]');
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const img = e.target;
-        img.src = img.dataset.src;
-        obs.unobserve(img);
-      }
-    });
-  }, { rootMargin: '100px', threshold: 0.1 });
-  imgs.forEach(i => observer.observe(i));
+
+  displayGames(filtered);
 }
 
-async function openZone(zone) {
-  overlay.style.display = 'flex';
-
-  gameTitle.textContent = zone.name;
-  if (!zone.author) zone.author = 'Unknown';
-
-  const zoneUrl = zone.url;
-  if (!zoneUrl) {
-    alert('Zone URL is missing.');
+function displayGames(games) {
+  container.innerHTML = '';
+  if (games.length === 0) {
+    container.innerHTML = 'No games found.';
     return;
   }
 
-  const isAbsolute = zoneUrl.startsWith('http');
+  games.forEach(game => {
+    const item = document.createElement('div');
+    item.className = 'zone-item';
 
-  if (isAbsolute) {
-    iframe.src = zoneUrl;
+    const img = document.createElement('img');
+    img.dataset.src = game.cover;
+    img.alt = game.name;
+    img.loading = 'lazy';
+
+    const btn = document.createElement('button');
+    btn.textContent = game.name;
+    
+    item.onclick = () => openGame(game);
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openGame(game);
+    };
+
+    item.appendChild(img);
+    item.appendChild(btn);
+    container.appendChild(item);
+  });
+
+  const imgs = document.querySelectorAll('img[data-src]');
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        obs.unobserve(img);
+      }
+    });
+  }, { rootMargin: '100px', threshold: 0.1 });
+  imgs.forEach(i => observer.observe(i));
+}
+
+async function openGame(game) {
+  overlay.style.display = 'flex';
+  gameTitle.textContent = game.name;
+
+  if (game.isAbsolute) {
+    iframe.src = game.url;
   } else {
-    const fullUrl = zoneUrl.replace('{COVER_URL}', coverURL).replace('{HTML_URL}', htmlURL);
+    const fullUrl = game.url.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL);
     try {
       const response = await fetch(fullUrl);
       const htmlContent = await response.text();
       const blob = new Blob([htmlContent], { type: 'text/html' });
       const blobUrl = URL.createObjectURL(blob);
       iframe.src = blobUrl;
-      iframe.onload = () => {
-        URL.revokeObjectURL(blobUrl);
-      };
+      iframe.onload = () => URL.revokeObjectURL(blobUrl);
     } catch (e) {
       console.error('Blob load failed, falling back to direct URL:', e);
       iframe.src = fullUrl;
@@ -280,19 +329,20 @@ async function openZone(zone) {
   }
 }
 
-document.getElementById('closeFullscreen').onclick = () => {
+closeBtn.onclick = () => {
   overlay.style.display = 'none';
   iframe.src = '';
 };
 
-document.getElementById('fullscreenBtn').onclick = () => {
+fullscreenBtn.onclick = () => {
   iframe.requestFullscreen().catch(() => {
     alert('Fullscreen mode is not supported or blocked.');
   });
 };
 
-loadZones();
+loadProvider();
 </script>
+
 <script>
 const root = document.documentElement;
 const themes = {
