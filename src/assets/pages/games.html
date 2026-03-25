@@ -362,6 +362,7 @@ function handleProviderChange() {
   if (providerSelect.value === 'truffled') {
     if (!localStorage.getItem('truffledNoticeSeen')) {
       document.getElementById('noticeModal').style.display = 'flex';
+      return; 
     }
     truffledProxySelect.style.display = 'block';
   } else {
@@ -389,6 +390,7 @@ async function loadGames() {
       
       allGames = rawZones.filter(z => z.id >= 0 && z.id <= 5000).map((z) => {
         return {
+          provider: 'gn-math',
           name: z.name,
           cover: z.cover.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL),
           url: z.url,
@@ -412,6 +414,7 @@ async function loadGames() {
       const data = await response.json();
       
       allGames = (data.games || []).map((g) => {
+        let rawUrl = g.url;
         let gameUrl = g.url;
         let thumb = g.thumbnail;
         
@@ -423,10 +426,12 @@ async function loadGames() {
         }
 
         return {
+          provider: 'truffled',
           name: g.name,
           cover: thumb,
           url: gameUrl,
-          isAbsolute: true,
+          rawUrl: rawUrl, 
+          isAbsolute: g.url.startsWith('http'),
           frameType: g.frameType || 'iframe'
         };
       });
@@ -507,26 +512,32 @@ async function openGame(game) {
   overlay.style.display = 'flex';
   gameTitle.textContent = game.name;
 
-  if (game.frameType === 'unity') {
-    const proxyBase = truffledProxySelect.value.replace(/\/$/, "");
-    iframe.src = `${proxyBase}/unityframe.html?url=${encodeURIComponent(game.url)}`;
+  if (game.provider === 'truffled') {
+    if (game.frameType === 'unity') {
+      const proxyBase = truffledProxySelect.value.replace(/\/$/, "");
+      iframe.src = `${proxyBase}/unityframe.html?url=${encodeURIComponent(game.rawUrl)}`;
+    } else {
+      iframe.src = game.url; 
+    }
     return;
   }
 
-  if (game.isAbsolute) {
-    iframe.src = game.url;
-  } else {
-    const fullUrl = game.url.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL);
-    try {
-      const response = await fetch(fullUrl);
-      const htmlContent = await response.text();
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const blobUrl = URL.createObjectURL(blob);
-      iframe.src = blobUrl;
-      iframe.onload = () => URL.revokeObjectURL(blobUrl);
-    } catch (e) {
-      console.error('Blob load failed, falling back to direct URL:', e);
-      iframe.src = fullUrl;
+  if (game.provider === 'gn-math') {
+    if (game.isAbsolute) {
+      iframe.src = game.url;
+    } else {
+      const fullUrl = game.url.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL);
+      try {
+        const response = await fetch(fullUrl);
+        const htmlContent = await response.text();
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const blobUrl = URL.createObjectURL(blob);
+        iframe.src = blobUrl;
+        iframe.onload = () => URL.revokeObjectURL(blobUrl);
+      } catch (e) {
+        console.error('Blob load failed, falling back to direct URL:', e);
+        iframe.src = fullUrl;
+      }
     }
   }
 }
@@ -535,9 +546,11 @@ downloadBtn.onclick = async () => {
   if (!currentGame) return;
 
   let fileContent = "";
-  let fullUrl = currentGame.isAbsolute 
-      ? currentGame.url 
-      : currentGame.url.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL);
+  let fullUrl = currentGame.url;
+
+  if (currentGame.provider === 'gn-math' && !currentGame.isAbsolute) {
+      fullUrl = currentGame.url.replace('{COVER_URL}', gnMathCoverURL).replace('{HTML_URL}', gnMathHtmlURL);
+  }
 
   try {
     const response = await fetch(fullUrl);
@@ -574,7 +587,6 @@ fullscreenBtn.onclick = () => {
 
 handleProviderChange();
 </script>
-
 <script>
 const root = document.documentElement;
 const themes = {
