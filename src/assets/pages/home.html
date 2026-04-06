@@ -4,24 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home - Dominum</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
 <style>
   :root {
     --bg: #0b0a16;
     --accent: #7a5cff;
     --blue: #00bfff;
     --text: #e6e6ff;
+    --surface: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
   }
-
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -29,8 +27,11 @@
     overflow: hidden;
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-
   #particles-js {
     position: fixed;
     width: 100%;
@@ -39,114 +40,153 @@
     left: 0;
     z-index: 0;
   }
-
   .content {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
     text-align: center;
-    padding: 0 20px;
+    animation: fadeScale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-
-  .logo {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 25px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  @keyframes fadeScale {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
   }
-
-  .logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+  .clock-container {
+    margin-bottom: 15px;
   }
-
-  h1 {
-    color: var(--accent);
-    font-size: 3em;
+  .clock {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 40px rgba(122, 92, 255, 0.3);
     letter-spacing: 2px;
   }
-
-  p {
-    color: var(--blue);
-    font-size: 1em;
-    margin-top: 10px;
-    opacity: 0.8;
+  .clock .sec {
+    color: rgba(255, 255, 255, 0.5);
   }
-
-  .shortcuts {
-    margin-top: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-    justify-content: center;
+  .clock .ampm {
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 10px;
+    vertical-align: super;
   }
-
-  .shortcut {
-    padding: 10px 22px;
-    border: 1px solid var(--accent);
-    border-radius: 30px;
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.9em;
+  .greeting {
+    color: var(--text);
+    font-size: 1.2rem;
+    opacity: 0.7;
+    margin-bottom: 50px;
     letter-spacing: 1px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.03);
+  }
+  .shortcuts-row {
     display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .shortcut-card {
+    width: 110px;
+    height: 110px;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
-
-  .shortcut i {
-    font-size: 1em;
+  .shortcut-card i {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    color: var(--text);
+    transition: all 0.3s ease;
   }
-
-  .shortcut:hover {
-    color: var(--blue);
-    border-color: var(--blue);
-    transform: translateY(-2px);
-    box-shadow: 0 0 10px var(--blue);
+  .shortcut-card span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0.9;
   }
-
+  .shortcut-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    background: rgba(122, 92, 255, 0.1);
+    box-shadow: 0 15px 40px rgba(122, 92, 255, 0.4);
+  }
+  .shortcut-card:hover i {
+    color: var(--accent);
+    transform: scale(1.1);
+  }
 </style>
 </head>
 <body>
-
   <div id="particles-js"></div>
-
   <div class="content">
-    <div class="logo">
-      <img src="/src/assets/images/dominum-transparent.png" alt="Logo">
+    <div class="clock-container">
+      <div class="clock" id="clockDisplay">00:00<span class="sec">:00</span> <span class="ampm">AM</span></div>
     </div>
-
-    <h1>DOMINUM</h1>
-    <p>Choose one of the options below to start using dominum.</p>
-
-    <div class="shortcuts">
-      <a href="/assets/pages/games.html" class="shortcut"><i class="fa-solid fa-gamepad"></i> Games</a>
-      <a href="/assets/pages/apps.html" class="shortcut"><i class="fa-solid fa-box-archive"></i> Apps</a>
-      <a href="/assets/pages/search.html" class="shortcut"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
-      <a href="/assets/pages/settings.html" class="shortcut"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="greeting" id="greetingDisplay">welcome to dominum</div>
+    
+    <div class="shortcuts-row">
+      <a href="/src/assets/pages/games.html" class="shortcut-card">
+        <i class="fa-solid fa-gamepad"></i>
+        <span>Games</span>
+      </a>
+      <a href="/src/assets/pages/apps.html" class="shortcut-card">
+        <i class="fa-solid fa-box-archive"></i>
+        <span>Apps</span>
+      </a>
+      <a href="/src/assets/pages/search.html" class="shortcut-card">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Search</span>
+      </a>
+      <a href="/src/assets/pages/settings.html" class="shortcut-card">
+        <i class="fa-solid fa-gear"></i>
+        <span>Settings</span>
+      </a>
+      <a href="/src/assets/pages/extras.html" class="shortcut-card">
+        <i class="fa-solid fa-plus"></i>
+        <span>Extras</span>
+      </a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-(function() {
+    function updateClock() {
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      let s = now.getSeconds();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      
+      h = h % 12;
+      h = h ? h : 12; 
+      m = m < 10 ? '0' + m : m;
+      s = s < 10 ? '0' + s : s;
+      
+      document.getElementById('clockDisplay').innerHTML = `${h}:${m}<span class="sec">:${s}</span> <span class="ampm">${ampm}</span>`;
+      
+      const greeting = document.getElementById('greetingDisplay');
+      const hour24 = now.getHours();
+      if (hour24 < 12) greeting.innerText = "good morning";
+      else if (hour24 < 18) greeting.innerText = "good afternoon";
+      else greeting.innerText = "good evening";
+    }
+    
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    (function() {
       const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
       const particlesContainer = document.getElementById('particles-js');
-
       if (particlesEnabled) {
         particlesContainer.style.display = 'block';
         particlesJS("particles-js", {
@@ -156,25 +196,11 @@
             "shape": { "type": "circle" },
             "opacity": { "value": 0.5 },
             "size": { "value": 2 },
-            "line_linked": {
-              "enable": true,
-              "distance": 130,
-              "color": "#7a5cff",
-              "opacity": 0.2,
-              "width": 1
-            },
-            "move": {
-              "enable": true,
-              "speed": 1.2,
-              "direction": "none",
-              "out_mode": "out"
-            }
+            "line_linked": { "enable": true, "distance": 130, "color": "#7a5cff", "opacity": 0.2, "width": 1 },
+            "move": { "enable": true, "speed": 1.2, "direction": "none", "out_mode": "out" }
           },
           "interactivity": {
-            "events": {
-              "onhover": { "enable": true, "mode": "repulse" },
-              "onclick": { "enable": false }
-            },
+            "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": false } },
             "modes": { "repulse": { "distance": 100 } }
           },
           "retina_detect": true
@@ -187,26 +213,17 @@
 <script>
 const root = document.documentElement;
 const themes = {
-  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
-           "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
-  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
-         "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
-  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
-          "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
-  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
-        "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
-  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
-           "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
-         "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
-  matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
-         "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff","--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)"},
+  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)"},
+  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6","--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)"},
+  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)"},
+  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6","--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)"},
+  dnv2:{"--bg":"#050007","--accent":"#ff00de","--blue":"#00fff7","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.15)"},
+  matrix:{"--bg":"#001100","--accent":"#00ff00","--blue":"#33ff33","--text":"#99ff99","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.15)"}
 };
-
 function applyTheme(theme){
   Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
 }
-
 (function(){
   const name = localStorage.getItem("dominum-theme") || "default";
   if(name === "custom"){

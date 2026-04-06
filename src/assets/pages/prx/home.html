@@ -3,22 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
   :root {
-    --bg: #0d0d10;
+    --bg: #0b0a16;
     --accent: #7a5cff;
+    --blue: #00bfff;
     --text: #e6e6ff;
-    --input-bg: rgba(27,27,34,0.85);
+    --surface: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+  }
+
+  * {
+    box-sizing: border-box;
+    outline: none;
   }
 
   html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     background: var(--bg);
     color: var(--text);
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   #particles-js {
@@ -33,84 +45,99 @@
   .content {
     position: relative;
     z-index: 1;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0 20px;
+    padding: 50px 60px;
+    background: var(--surface);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    width: 90%;
+    max-width: 700px;
+    animation: fadeScale 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @keyframes fadeScale {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
   }
 
   .logo {
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 0 0 20px rgba(122,92,255,0.4);
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--text);
+    opacity: 0.7;
     margin-bottom: 40px;
-    color: var(--accent);
-    text-shadow: 0 0 12px rgba(122,92,255,0.6);
+    letter-spacing: 1px;
   }
 
   .search-container {
     position: relative;
     width: 100%;
-    max-width: 500px;
     display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .search-container:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(122, 92, 255, 0.3);
+    background: rgba(0, 0, 0, 0.5);
   }
 
   .search-container input {
     flex: 1;
-    padding: 14px 20px;
-    border-radius: 30px 0 0 30px;
-    border: 2px solid rgba(255,255,255,0.2);
-    background: var(--input-bg);
+    padding: 16px 24px;
+    border: none;
+    background: transparent;
     color: var(--text);
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
   }
 
-  .search-container input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
+  .search-container input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Orbitron', sans-serif;
   }
 
   .search-container button {
-    padding: 0 16px;
+    padding: 0 28px;
     border: none;
-    background: var(--accent);
-    color: #fff;
-    border-radius: 0 30px 30px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 14px;
     cursor: pointer;
-    font-size: 1.1rem;
-    transition: transform 0.2s ease, background 0.2s ease;
-  }
-
-  .search-container button:hover {
-    transform: scale(1.05);
-    background: #9a7eff;
-  }
-
-  .quick-links {
-    margin-top: 40px;
+    font-size: 1.2rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
   }
 
-  .quick-links a {
-    padding: 10px 16px;
-    background: var(--input-bg);
-    border-radius: 12px;
-    color: var(--text);
-    text-decoration: none;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
-
-  .quick-links a:hover {
+  .search-container button:hover {
     background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
     transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(122, 92, 255, 0.4);
   }
 </style>
 </head>
@@ -120,55 +147,158 @@
 
 <div class="content">
   <div class="logo">Dominum</div>
+  <div class="subtitle">Secure, unfiltered, and untracked web access.</div>
 
   <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search the web...">
-    <button id="searchBtn">🔍</button>
+    <input type="text" id="searchInput" placeholder="Search the web or enter URL...">
+    <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
   </div>
+</div>
 
-<!-- Particles.js yay -->
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<script src="/config.js"></script>
+<script src="/baremux/index.js"></script>
+<script src="/scram/scramjet.all.js"></script>
+
 <script>
-  particlesJS("particles-js", {
-    "particles": {
-      "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-      "color": { "value": "#7a5cff" },
-      "shape": { "type": "circle" },
-      "opacity": { "value": 0.6, "random": true },
-      "size": { "value": 3, "random": true },
-      "line_linked": { "enable": true, "distance": 120, "color": "#7a5cff", "opacity": 0.4, "width": 1 },
-      "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
-    },
-    "interactivity": {
-      "detect_on": "canvas",
-      "events": {
-        "onhover": { "enable": true, "mode": "grab" },
-        "onclick": { "enable": true, "mode": "push" },
-        "resize": true
-      },
-      "modes": {
-        "grab": { "distance": 140, "line_linked": { "opacity": 0.6 } },
-        "push": { "particles_nb": 4 }
-      }
-    },
-    "retina_detect": true
+  const { ScramjetController } = $scramjetLoadController();
+  
+  const scramjet = new ScramjetController({
+    files: {
+      wasm: "/scram/wasm.wasm",
+      all: "/scram/scramjet.all.js",
+      sync: "/scram/scramjet.sync.js"
+    }
   });
+  
+  scramjet.init();
+  navigator.serviceWorker.register("/sw.js");
+  
+  const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+  
+  async function initTransport() {
+      if ((await connection.getTransport()) !== "/libcurl/index.mjs") {
+          await connection.setTransport("/libcurl/index.mjs", [{ websocket: "wss://wisp.mercurywork.shop/" }]);
+      }
+  }
+  initTransport();
+</script>
+
+<script>
+  (function() {
+    const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
+    const particlesContainer = document.getElementById('particles-js');
+
+    if (particlesEnabled) {
+      particlesContainer.style.display = 'block';
+      particlesJS("particles-js", {
+        "particles": {
+          "number": { "value": 60 },
+          "color": { "value": ["#7a5cff", "#00bfff"] },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.5 },
+          "size": { "value": 2 },
+          "line_linked": { "enable": true, "distance": 130, "color": "#7a5cff", "opacity": 0.2, "width": 1 },
+          "move": { "enable": true, "speed": 1.2, "direction": "none", "out_mode": "out" }
+        },
+        "interactivity": {
+          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": false } },
+          "modes": { "repulse": { "distance": 100 } }
+        },
+        "retina_detect": true
+      });
+    } else {
+      particlesContainer.style.display = 'none';
+    }
+  })();
 
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.getElementById('searchBtn');
 
-  function performSearch() {
-    const query = searchInput.value.trim();
-    if (!query) return;
-    const url = query.includes('.') ? `https://${query}` : `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
-    window.location.href = `/s/embed.html#${url}`;
+  function formatUrl(input) {
+      try { return new URL(input).toString(); } catch (err) {}
+      try {
+          const url = new URL(`http://${input}`);
+          if (url.hostname.includes(".")) return url.toString();
+      } catch (err) {}
+      return `https://search.brave.com/search?q=${encodeURIComponent(input)}`;
   }
 
-  searchBtn.addEventListener('click', performSearch);
+  async function performSearch(query) {
+      if (!query) return;
+      const formattedUrl = formatUrl(query);
+
+      await navigator.serviceWorker.ready;
+      
+      if (!navigator.serviceWorker.controller) {
+          window.location.reload();
+          return;
+      }
+
+      let existingFrame = document.getElementById("sj-frame");
+      if (existingFrame) existingFrame.remove();
+
+      const frameObj = scramjet.createFrame();
+      const frameElement = frameObj.frame;
+      frameElement.id = "sj-frame";
+      
+      frameElement.style.border = "none";
+      frameElement.style.position = "absolute";
+      frameElement.style.top = "0";
+      frameElement.style.left = "0";
+      frameElement.style.width = "100%";
+      frameElement.style.height = "100%";
+      frameElement.style.zIndex = "999";
+      frameElement.style.backgroundColor = "var(--bg)";
+
+      document.body.appendChild(frameElement);
+      frameObj.go(formattedUrl);
+  }
+
+  searchBtn.addEventListener('click', () => performSearch(searchInput.value.trim()));
   searchInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') performSearch();
+      if (e.key === 'Enter') performSearch(searchInput.value.trim());
   });
+
+  const params = new URLSearchParams(window.location.search);
+  const targetUrl = params.get('url');
+  if (targetUrl) {
+      performSearch(decodeURIComponent(targetUrl));
+  }
 </script>
 
+<script>
+const root = document.documentElement;
+const themes = {
+  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff","--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)"},
+  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)"},
+  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6","--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)"},
+  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)"},
+  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6","--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)"},
+  dnv2:{"--bg":"#050007","--accent":"#ff00de","--blue":"#00fff7","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.15)"},
+  matrix:{"--bg":"#001100","--accent":"#00ff00","--blue":"#33ff33","--text":"#99ff99","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.15)"}
+};
+
+function applyTheme(theme){
+  Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
+}
+
+(function(){
+  const name = localStorage.getItem("dominum-theme") || "default";
+  if(name === "custom"){
+    const custom = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
+    applyTheme(custom);
+  } else applyTheme(themes[name]);
+})();
+
+try {
+  const themeVars = window.parent.document.documentElement.style;
+  for(let i=0; i<themeVars.length; i++){
+    const p = themeVars[i];
+    document.documentElement.style.setProperty(p, themeVars.getPropertyValue(p));
+  }
+} catch(e){}
+</script>
 </body>
 </html>

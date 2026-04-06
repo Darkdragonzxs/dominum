@@ -18,49 +18,78 @@
     position:relative;z-index:1;
   }
   h1 {font-size:2.2em;margin-bottom:30px;text-transform:uppercase;color:var(--accent);}
+  
   .extras-buttons {display:flex;gap:20px;flex-wrap:wrap;justify-content:center;z-index:2;}
+  
   .extras-btn {
     background:var(--surface);border:2px solid var(--border);color:var(--text);
     padding:15px 30px;border-radius:10px;cursor:pointer;font-size:1em;
-    text-transform:uppercase;letter-spacing:1px;transition:all .3s ease;
+    text-transform:uppercase;letter-spacing:1px;transition:all .3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position:relative;z-index:3;
   }
-  .extras-btn:hover {background:var(--accent);color:#fff;transform:translateY(-3px);}
+  
+  .extras-btn:hover {
+    background:var(--accent);
+    color:#fff;
+    transform:translateY(-4px);
+    box-shadow: 0 8px 20px rgba(122, 92, 255, 0.4);
+    border-color: var(--accent);
+  }
+
   .modal {
     display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;
-    background:rgba(10,10,20,.8);backdrop-filter:blur(5px);justify-content:center;align-items:center;
+    background:rgba(10,10,20,.8);backdrop-filter:blur(8px);justify-content:center;align-items:center;
+    opacity: 0; transition: opacity 0.3s ease;
   }
-  .modal.active{display:flex;}
+  
+  .modal.active{display:flex; opacity: 1;}
+  
   .modal-content {
     background:var(--card-bg);border:2px solid var(--border);border-radius:15px;
     padding:25px;width:80%;max-width:700px;max-height:80%;overflow-y:auto;
-    box-shadow:0 0 20px var(--accent);animation:fadeIn .3s ease;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);animation:slideUp .4s cubic-bezier(0.2, 0.8, 0.2, 1);
     z-index:1001;position:relative;
   }
+  
   .modal-header {
-    display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;
+    border-bottom: 1px solid var(--border); padding-bottom: 10px;
   }
-  .modal-header h2{color:var(--accent);font-size:1.5em;}
-  .close-btn{cursor:pointer;font-size:1.3em;color:var(--text);transition:color .3s ease;}
-  .close-btn:hover{color:var(--accent);}
+  
+  .modal-header h2{color:var(--accent);font-size:1.5em; margin:0;}
+  
+  .close-btn{cursor:pointer;font-size:1.5em;color:var(--text);transition:color .3s ease, transform 0.2s ease;}
+  .close-btn:hover{color:var(--accent); transform: scale(1.2);}
+  
   .card {
     background:var(--surface);border:1px solid var(--border);border-radius:10px;
     padding:15px;display:flex;align-items:flex-start;gap:15px;margin-bottom:15px;
-    transition:transform .2s ease,border-color .3s ease;cursor:pointer;
+    transition:transform .3s ease,border-color .3s ease, box-shadow .3s ease;cursor:pointer;
   }
-  .card:hover{border-color:var(--accent);transform:translateY(-3px);}
-  .card img{width:60px;height:60px;border-radius:50%;object-fit:cover;}
+  
+  .card:hover{
+    border-color:var(--accent);
+    transform:translateY(-3px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+  
+  .card img{width:60px;height:60px;border-radius:50%;object-fit:cover; border: 2px solid transparent; transition: border-color 0.3s ease;}
+  .card:hover img{border-color: var(--accent);}
+  
   .card-content{flex:1;}
-  .card h3{margin:0;font-size:1.1em;color:var(--accent);}
+  .card h3{margin:0;font-size:1.1em;color:var(--accent); transition: color 0.3s ease;}
   .card p.role{font-size:.9em;color:var(--blue);margin-bottom:5px;}
-  .card p.desc{font-size:.85em;color:var(--text);opacity:.9;}
+  .card p.desc{font-size:.85em;color:var(--text);opacity:.9; line-height: 1.4;}
+  
   .link-btns{display:flex;gap:15px;margin-top:20px;justify-content:center;}
   .link-btn{
-    background:var(--accent);border:none;color:#fff;padding:10px 20px;border-radius:8px;
-    cursor:pointer;font-family:'Orbitron',sans-serif;text-transform:uppercase;transition:background .3s;
+    background:var(--surface);border:1px solid var(--accent);color:#fff;padding:10px 20px;border-radius:8px;
+    cursor:pointer;font-family:'Orbitron',sans-serif;text-transform:uppercase;transition:all .3s ease;
   }
-  .link-btn:hover{background:var(--blue);}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .link-btn:hover{background:var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(122, 92, 255, 0.3);}
+  
+  @keyframes slideUp{from{opacity:0;transform:translateY(20px) scale(0.95);}to{opacity:1;transform:translateY(0) scale(1);}}
+  
   #particles-js {
     position:fixed;
     width:100%;
@@ -70,6 +99,7 @@
     z-index:-1;
     pointer-events:none;
   }
+  
   #vortex-links {
     display: flex;
     flex-direction: column;
@@ -79,12 +109,7 @@
   #vortex-links .card {
     text-align: center;
     cursor: pointer;
-    transition: background 0.3s, box-shadow 0.3s;
-  }
-  
-  #vortex-links .card:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 10px var(--accent);
+    justify-content: center;
   }
 </style>
 </head>
@@ -97,304 +122,75 @@
   <button class="extras-btn" onclick="openModal('vortex-modal')"><i class="fa-solid fa-comments"></i> Vortex Chat</button>
   <button class="extras-btn" onclick="openEaglerLauncher()"><i class="fa-solid fa-rocket"></i> Eagler Launcher</button>
   <button class="extras-btn" onclick="openGamePorts()"><i class="fa-solid fa-gamepad"></i> Game Ports</button>
-  <button class="extras-btn" onclick="openDataGen()"><i class="fa-solid fa-code"></i> Data URL Generator</button>
+  <button class="extras-btn" onclick="openDataGen()"><i class="fa-solid fa-code"></i> Data URL Gen</button>
 </div>
+
+<!-- CREDITS MODAL -->
 <div class="modal" id="credits-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h2>Credits</h2>
       <span class="close-btn" onclick="closeModal('credits-modal')">&times;</span>
     </div>
-    <div class="card" onclick="openProfile('Dominus_Elitus','Owner of Dominum Network','I own the whole thing, also idk what to write here cuz fish :p','/src/assets/images/transparent-dominum.png')">
-      <img src="/src/assets/images/transparent-dominum.png" alt="Dominus">
-      <div class="card-content">
-        <h3>Dominus_Elitus</h3>
-        <p class="role">Owner of Dominum Network</p>
-        <p class="desc">Fish :D</p>
-      </div>
-    </div>
-    <div class="card" onclick="openProfile('Bog','Lead Developer','Credits to this guy for the game ports (Ultrakill, Tattletail, etc.) Also credits to NPA (National Porting Assosiation), GN-Math, and Truffled.lol.','/src/assets/images/users/bog.gif')">
-      <img src="/src/assets/images/users/bog.gif" alt="Bog">
-      <div class="card-content">
-        <h3>Bog</h3>
-        <p class="role">Games And Game Ports</p>
-        <p class="desc">Credits to this guy for the game ports (Ultrakill, Tattletail, etc.)</p>
-      </div>
-    </div>
-    <div class="card" onclick="openProfile('ZXS','Dev Management','Basically made the entire site layout and made the games, apps, and proxy. Also a proxy developer, and owner of ZXS Games.','/src/assets/images/users/zxs.png')">
-      <img src="/src/assets/images/users/zxs.png" alt="ZXS">
-      <div class="card-content">
-        <h3>ZXS</h3>
-        <p class="role">Dev Management</p>
-        <p class="desc">Basically made the entire site layout and made the games, apps, and proxy.</p>
-      </div>
+    <div id="credits-container">
+      <!-- Credits are loaded here via JS -->
     </div>
   </div>
 </div>
+
+<!-- PARTNERS MODAL -->
 <div class="modal" id="partners-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h2>Partners</h2>
       <span class="close-btn" onclick="closeModal('partners-modal')">&times;</span>
     </div>
-    <div class="card" onclick="handlePartnerClick('ProGS2Z','Swatt12','A volcano full of games.','/src/assets/images/partners/progs2z.png','https://discord.gg/CwtVutWYRj','https://sites.google.com/view/prohomework2z')">
-      <img src="/src/assets/images/partners/progs2z.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>ProGS2Z</h3>
-        <p class="role">Owned by: Swatt12 :/</p>
-        <p class="desc">A volcano full of games.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Pixel-X26','Pixel','The unblocked website for school.','/src/assets/images/partners/pixel-x26.png','https://discord.gg/W59jgrbC','https://sites.google.com/view/pi-26/%E2%84%8D')">
-      <img src="/src/assets/images/partners/pixel-x26.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Pixel-X26</h3>
-        <p class="role">Owned by: Pixel</p>
-        <p class="desc">The unblocked website for school.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Games Unite','Mathias','Uniting Others Alike.','/src/assets/images/partners/games-unite.png','https://discord.gg/5tYbGTYxQV','https://sites.google.com/view/djnfjewio-jwmekmeg-get5rju-rww')">
-      <img src="/src/assets/images/partners/games-unite.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Games Unite</h3>
-        <p class="role">Owned by: Mathias</p>
-        <p class="desc">Uniting Others Alike.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Blood','Maybekbj','Be apart of something amazing.','/src/assets/images/partners/blood.png','https://discord.gg/Cu2wxw8Qef','https://sites.google.com/gwd50.org/kingstonhomework/home')">
-      <img src="/src/assets/images/partners/blood.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Blood</h3>
-        <p class="role">Owned by: Maybekbj</p>
-        <p class="desc">Be apart of something amazing.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('ZXS Games','ZXS','UBG like never seen before.','/src/assets/images/partners/zxs-games.png','https://discord.com/invite/mPJcQKy2s2','https://zxsgames.vip/')">
-      <img src="/src/assets/images/partners/zxs-games.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>ZXS Games</h3>
-        <p class="role">Owned by: ZXS</p>
-        <p class="desc">UBG like never seen before.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Galaxy Hub','Alex','A great unblocked site.','/src/assets/images/partners/gal-hub.png','https://discord.gg/D5RZRny7pD','https://hubgal.my.canva.site/')">
-      <img src="/src/assets/images/partners/gal-hub.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Galaxy Hub</h3>
-        <p class="role">Owned by: Alex</p>
-        <p class="desc">A great unblocked site.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Botulinum','Amelia_GamingZone','A cool site with a nice asthetic.','/src/assets/images/partners/botulinum.png','https://discord.com/invite/XccT9zax','https://sites.google.com/view/botulinum-/home')">
-      <img src="/src/assets/images/partners/botulinum.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Botulinum</h3>
-        <p class="role">Owned by: Amelia_GamingZone</p>
-        <p class="desc">A cool site with a nice asthetic.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Mojmail Ink.','ProGS2Z','A Company made by ProGS2Z.','/src/assets/images/partners/mojmail.png','none','https://sites.google.com/view/mojmail-ink/home')">
-      <img src="/src/assets/images/partners/mojmail.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Mojmail Ink.</h3>
-        <p class="role">Owned by: ProGS2Z</p>
-        <p class="desc">A Company made by ProGS2Z.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Game Blitz','GameBlitz','A site with tons of visits.','/src/assets/images/partners/game-blitz.png','https://linktr.ee/GameBlitz','https://sites.google.com/view/www-clever-com')">
-      <img src="/src/assets/images/partners/game-blitz.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Game Blitz</h3>
-        <p class="role">Owned by: GameBlitz</p>
-        <p class="desc">A site with tons of visits.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('M3T4L','Dominus_Elitus','Endless options for unblocking.','/src/assets/images/partners/m3t4l.png','https://discord.gg/nTVx9BMcYb','https://sites.google.com/view/acgf-studentssmarts4you435d-2/home')">
-      <img src="/src/assets/images/partners/m3t4l.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>M3T4L</h3>
-        <p class="role">Owned by: Dominus_Elitus</p>
-        <p class="desc">Endless options for unblocking.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('ChillZone','DyingPoets','The best school entertainment site.','/src/assets/images/partners/chillzone.png','https://discord.gg/DHx4VKwwkt','https://sites.google.com/view/eduviewing')">
-      <img src="/src/assets/images/partners/chillzone.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>ChillZone</h3>
-        <p class="role">Owned by: DyingPoets</p>
-        <p class="desc">The best school entertainment site.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Unlocked Joy','Unlocked Joy','Unrestricted Game Site.','/src/assets/images/partners/unlocked-joy.png','https://discord.gg/pyehknEkXj','https://sites.google.com/view/unlockedjoy-site/home')">
-      <img src="/src/assets/images/partners/unlocked-joy.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Unlocked Joy</h3>
-        <p class="role">Owned by: Unlocked Joy</p>
-        <p class="desc">Unrestricted Game Site.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('チル・カーブ (Chill Kirb Central)','Øverłoaded','Everything you need on a chill site.','/src/assets/images/partners/chill-kirb.gif','https://discord.gg/FuTy7Pej','https://sites.google.com/view/fus3-bomb/home')">
-      <img src="/src/assets/images/partners/chill-kirb.gif" alt="Partner Logo">
-      <div class="card-content">
-        <h3>チル・カーブ (Chill Kirb Central)</h3>
-        <p class="role">Owned by: Øverłoaded</p>
-        <p class="desc">Everything you need on a chill site.</p>
-      </div>
-    </div><div class="card" onclick="handlePartnerClick('GSites Entertainment (soon)','Owner Unknown','Endless options for unblocking.','/src/assets/images/partners/soon.png','none','none')">
-      <img src="/src/assets/images/partners/soon.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>GSites Entertainment (soon)</h3>
-        <p class="role">Owned by: Owner Unknown</p>
-        <p class="desc">Endless options for unblocking.</p>
-      </div>
-    </div><div class="card" onclick="handlePartnerClick('Coffees Arcade','Coffee','Your site for games, proxies, and more.','/src/assets/images/partners/coffees-arcade.png','https://discord.gg/7D6zGsGmUF','https://sites.google.com/view/coffe-i-eat')">
-      <img src="/src/assets/images/partners/coffees-arcade.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Coffee's Arcade</h3>
-        <p class="role">Owned by: Coffee</p>
-        <p class="desc">Your site for games, proxies, and more.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Voidcore','Owner Unknown','The ultimate hangout spot.','/src/assets/images/partners/voidcore.png','https://discord.gg/6ebkpjWDzz','https://sites.google.com/view/v0idcore/home')">
-      <img src="/src/assets/images/partners/voidcore.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Voidcore</h3>
-        <p class="role">Owned by: Owner Unknown</p>
-        <p class="desc">The ultimate hangout spot.</p>
-      </div>
-    </div><div class="card" onclick="handlePartnerClick('Pulsar Proxy','Kilonøx (Yeti1o1)','Great ui with games and apps.','/src/assets/images/partners/pulsar.png','https://discord.gg/9KKk4DNBPE','https://pulsar.global.ssl.fastly.net/')">
-      <img src="/src/assets/images/partners/pulsar.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Pulsar Proxy</h3>
-        <p class="role">Owned by: Kilonøx (Yeti1o1)</p>
-        <p class="desc">Great ui with games and apps.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Copyright Dragon','Owner Unknown','Im not sure its copyrighted yet.','/src/assets/images/partners/c-dragon.png','none','https://sites.google.com/view/copyright-dragon-')">
-      <img src="/src/assets/images/partners/c-dragon.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Copyright Dragon</h3>
-        <p class="role">Owned by: Owner Unknown</p>
-        <p class="desc">Im not sure it's copyrighted yet.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Sunset Learning','Sunset Learning','Sunset Learning is a site with tons of games, books, apps, movies, and more.','/src/assets/images/partners/sunset-learning.png','https://discord.gg/kStXJcQ8np','https://sites.google.com/view/sunsetlearninn/')">
-      <img src="/src/assets/images/partners/sunset-learning.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Sunset Learning</h3>
-        <p class="role">Owned by: Sunset Learning</p>
-        <p class="desc">Sunset Learning is a site with tons of games, books, apps, movies, and more.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Unblocked Makers','Jacorn And Maddox','The best place to find tons of unblocked websites, including the one you`re on now.','/src/assets/images/partners/unblocked-makers.png','https://discord.gg/uvuNAzrhWc','https://ubghub.org/')">
-      <img src="/src/assets/images/partners/unblocked-makers.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Unblocked Makers</h3>
-        <p class="role">Owned by: Jacorn And Maddox</p>
-        <p class="desc">The best place to find tons of unblocked websites, including the one you're on now.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('DuckMath','JaCorn And Maddox','Offering 200+ games, a compeditive leaderboard, custom profiles, and more.','/src/assets/images/partners/duckmath.gif','https://discord.gg/EVNRkBfqrR','https://duckmath.org')">
-      <img src="/src/assets/images/partners/duckmath.gif" alt="Partner Logo">
-      <div class="card-content">
-        <h3>DuckMath</h3>
-        <p class="role">Owned by: JaCorn And Maddox</p>
-        <p class="desc">Offering 200+ games, a compeditive leaderboard, custom profiles, and more.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Orbit (Shut down)','OJ (Astr0Cat)','Does this site even have a description anymore??','/src/assets/images/partners/orbit.png','https://discord.gg/UnG9qrfW','https://orbit.nekoweb.org/')">
-      <img src="/src/assets/images/partners/orbit.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Orbit (Shut down)</h3>
-        <p class="role">Owned by: OJ (Astr0Cat)</p>
-        <p class="desc">Does this site even have a description anymore??</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Vortex','Idk the owner but the Co-Owner is Gmanchew99','Chat with your friends at school.','/src/assets/images/partners/vortex.png','https://discord.gg/vtex','https://vortexos.net/')">
-      <img src="/src/assets/images/partners/vortex.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Vortex</h3>
-        <p class="role">Owned by: Idk the owner but the Co-Owner is Gmanchew99</p>
-        <p class="desc">Chat with your friends at school.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('CookingWithJay (Ultra)','Jay','Cooking up games for your entertainment.','/src/assets/images/partners/cwj-ultra.png','none','https://sites.google.com/view/cookingwitjay-ultra/')">
-      <img src="/src/assets/images/partners/cwj-ultra.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>CookingWithJay (Ultra)</h3>
-        <p class="role">Owned by: Jay</p>
-        <p class="desc">Cooking up games for your entertainment.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Bloxcraft','Bloxcraft Studios','An unblocked games site you can play every day.','/src/assets/images/partners/bloxcraft.png','https://discord.gg/sqPFYEsz8F','https://bloxcraft-ubg.pages.dev/')">
-      <img src="/src/assets/images/partners/bloxcraft.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Bloxcraft</h3>
-        <p class="role">Owned by: Bloxcraft Studios</p>
-        <p class="desc">An unblocked games site you can play every day.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('UNB History','TVM (emp56)','An unblocked games site you can play every day.','/src/assets/images/partners/unb-history.png','none','https://sites.google.com/stu.palmbeachschools.org/learn-play-adapt')">
-      <img src="/src/assets/images/partners/unb-history.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>UNB History</h3>
-        <p class="role">Owned by: TVM (emp56)</p>
-        <p class="desc">Every day is a new chance to improve and build more immersive digital experiences.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('Axiom Proxy','Arson (imdonewithdc)','An amazing webos proxy with a sleek feeling.','/src/assets/images/partners/axiom.png','https://discord.gg/A2AZb8SgCD','https://cars.axiomsontop.shop/')">
-      <img src="/src/assets/images/partners/axiom.png" alt="Partner Logo">
-      <div class="card-content">
-        <h3>Axiom Proxy</h3>
-        <p class="role">Owned by: Arson (imdonewithdc)</p>
-        <p class="desc">An amazing webos proxy with a sleek feeling.</p>
-      </div>
-    </div>
-    <div class="card" onclick="handlePartnerClick('1Key','Builder267|595k','pls use 1key','/src/assets/images/partners/1key.gif','https://discord.gg/jrtpTfZu','https://1key.lol/')">
-      <img src="/src/assets/images/partners/1key.gif" alt="Partner Logo">
-      <div class="card-content">
-        <h3>1Key</h3>
-        <p class="role">Owned by: Builder267|595k</p>
-        <p class="desc">pls use 1key</p>
-      </div>
+    <div id="partners-container">
+      <!-- Partners are loaded here via JS -->
     </div>
   </div>
 </div>
+
+<!-- PROFILE MODAL -->
 <div class="modal" id="profile-modal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-width: 500px;">
     <div class="modal-header">
       <h2 id="profile-name"></h2>
       <span class="close-btn" onclick="closeModal('profile-modal')">&times;</span>
     </div>
-    <div style="display:flex;gap:15px;align-items:flex-start;">
-      <img id="profile-img" src="" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;">
+    <div style="display:flex;gap:20px;align-items:center;">
+      <img id="profile-img" src="" alt="Profile" style="width:90px;height:90px;border-radius:50%;object-fit:cover; border: 2px solid var(--accent);">
       <div>
-        <p id="profile-role" style="color:var(--blue);margin:5px 0;"></p>
-        <p id="profile-desc" style="color:var(--text);opacity:.9;font-size:.9em;"></p>
+        <p id="profile-role" style="color:var(--blue);margin:0 0 10px 0; font-weight: bold;"></p>
+        <p id="profile-desc" style="color:var(--text);opacity:.9;font-size:.95em; line-height: 1.5;"></p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- PARTNER LINK MODAL -->
 <div class="modal" id="partner-link-modal">
-  <div class="modal-content">
-    <div class="modal-header">
+  <div class="modal-content" style="max-width: 400px; text-align: center;">
+    <div class="modal-header" style="justify-content: center; position: relative;">
       <h2 id="partner-name"></h2>
-      <span class="close-btn" onclick="closeModal('partner-link-modal')">&times;</span>
+      <span class="close-btn" onclick="closeModal('partner-link-modal')" style="position: absolute; right: 0;">&times;</span>
     </div>
-    <p style="text-align:center;margin-top:10px;">Where would you like to go?</p>
+    <p style="margin-top:15px; color: var(--blue);">Where would you like to go?</p>
     <div class="link-btns">
       <button id="discord-btn" class="link-btn"><i class="fa-brands fa-discord"></i> Discord</button>
       <button id="website-btn" class="link-btn"><i class="fa-solid fa-globe"></i> Website</button>
     </div>
   </div>
 </div>
+
+<!-- VORTEX MODAL -->
 <div class="modal" id="vortex-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h2>Vortex Chat</h2>
       <span class="close-btn" onclick="closeModal('vortex-modal')">&times;</span>
     </div>
-    <p style="text-align:center;margin-bottom:15px;">Select a link to open:</p>
+    <p style="text-align:center;margin-bottom:15px; color: var(--blue);">Select a proxy link to open:</p>
     <div id="vortex-links">
       <div class="card" onclick="openEmbed('https://vortexos.net/embed/dominum')"><h3>Link 1</h3></div>
       <div class="card" onclick="openEmbed('https://vtx.chat/embed/dominum')"><h3>Link 2</h3></div>
@@ -415,188 +211,266 @@
   </div>
 </div>
 
-<div id="embed-container" style="
-  display:none;
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  z-index:2000;
-  background-color:#000;
-">
+<div id="embed-container" style="display:none; position:fixed; top:0;left:0; width:100%;height:100%; z-index:2000; background-color:#000;">
   <button onclick="closeEmbed()" style="
-    position:absolute;
-    top:15px;right:20px;
-    z-index:2001;
-    background:var(--accent);
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    padding:10px 20px;
-    font-family:'Orbitron',sans-serif;
-    text-transform:uppercase;
-    cursor:pointer;
-    transition:background .3s;
-  ">Close</button>
+    position:absolute; top:15px;right:20px; z-index:2001;
+    background:var(--accent); color:#fff; border:none; border-radius:8px;
+    padding:10px 20px; font-family:'Orbitron',sans-serif; text-transform:uppercase;
+    cursor:pointer; transition:background .3s, transform 0.2s;
+  " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Close</button>
   <iframe id="embed-frame" src="" style="width:100%;height:100%;border:none;"></iframe>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-(function() {
-      const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
-      const particlesContainer = document.getElementById('particles-js');
-
-      if (particlesEnabled) {
-        particlesContainer.style.display = 'block';
-        particlesJS("particles-js", {
-          "particles": {
-            "number": { "value": 60 },
-            "color": { "value": ["#7a5cff", "#00bfff"] },
-            "shape": { "type": "circle" },
-            "opacity": { "value": 0.5 },
-            "size": { "value": 2 },
-            "line_linked": {
-              "enable": true,
-              "distance": 130,
-              "color": "#7a5cff",
-              "opacity": 0.2,
-              "width": 1
-            },
-            "move": {
-              "enable": true,
-              "speed": 1.2,
-              "direction": "none",
-              "out_mode": "out"
-            }
-          },
-          "interactivity": {
-            "events": {
-              "onhover": { "enable": true, "mode": "repulse" },
-              "onclick": { "enable": false }
-            },
-            "modes": { "repulse": { "distance": 100 } }
-          },
-          "retina_detect": true
-        });
-      } else {
-        particlesContainer.style.display = 'none';
-      }
-    })();
-</script>
-<script>
-let currentPartner={};
-function openModal(id){document.getElementById(id).classList.add('active');}
-function closeModal(id){document.getElementById(id).classList.remove('active');}
-document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id);}));
-function openProfile(name,role,desc,img){
-  document.getElementById('profile-name').innerText=name;
-  document.getElementById('profile-role').innerText=role;
-  document.getElementById('profile-desc').innerText=desc;
-  document.getElementById('profile-img').src=img;
-  openModal('profile-modal');
-}
-function handlePartnerClick(name,owner,desc,img,discord,website){
-  if((!discord||discord==='none')&&website){
-    window.open(website,'_blank');
-    return;
-  }
-  if((!website||website==='none')&&discord){
-    window.open(discord,'_blank');
-    return;
-  }
-  currentPartner={name,discord,website};
-  document.getElementById('partner-name').innerText=name;
-  openModal('partner-link-modal');
-}
-document.getElementById('discord-btn').addEventListener('click',()=>{
-  closeModal('partner-link-modal');
-  if(currentPartner.discord&&currentPartner.discord!=='none')window.open(currentPartner.discord,'_blank');
-  else if(currentPartner.website)window.open(currentPartner.website,'_blank');
-});
-document.getElementById('website-btn').addEventListener('click',()=>{
-  closeModal('partner-link-modal');
-  if(currentPartner.website&&currentPartner.website!=='none')window.open(currentPartner.website,'_blank');
-  else if(currentPartner.discord)window.open(currentPartner.discord,'_blank');
-});
-function openEmbed(url){
-  closeModal('vortex-modal');
-  const embedContainer = document.getElementById('embed-container');
-  const iframe = document.getElementById('embed-frame');
-  iframe.src = url;
-  embedContainer.style.display = 'block';
-}
-function closeEmbed(){
-  const embedContainer = document.getElementById('embed-container');
-  const iframe = document.getElementById('embed-frame');
-  iframe.src = '';
-  embedContainer.style.display = 'none';
-}
-try{
-  const themeVars=window.parent.document.documentElement.style;
-  for(let i=0;i<themeVars.length;i++){
-    const p=themeVars[i];
-    document.documentElement.style.setProperty(p,themeVars.getPropertyValue(p));
-  }
-}catch(e){}
-</script>
-<script>
-const root=document.documentElement;
-const themes={
-  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff","--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
-  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
-  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6","--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
-  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
-  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6","--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-  dnv2:{"--bg":"#050007","--accent":"#ff00de","--blue":"#00fff7","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.15)","--card-bg":"rgba(15,0,30,0.7)"},
-  matrix:{"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99","--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
-};
-function applyTheme(theme){Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));const frame=document.getElementById("content-frame");try{Object.entries(theme).forEach(([v,k])=>frame.contentWindow.document.documentElement.style.setProperty(v,k));}catch(e){}}
-function loadTheme(){
-  const name=localStorage.getItem("dominum-theme")||"default";
-  if(name==="custom"){
-    const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
-    applyTheme(t);
-  }else applyTheme(themes[name]);
-}
-if(name==="custom"){
-  const t=JSON.parse(localStorage.getItem("dominum-custom-theme")||"{}");
-  Object.entries(t).forEach(([v,k])=>root.style.setProperty(v,k));
-}else Object.entries(themes[name]).forEach(([v,k])=>root.style.setProperty(v,k));
-loadTheme();
-</script>
-<script>
-function openEaglerLauncher() {
-  const targetUrl = "/src/assets/pages/ampler-launcher.html"; 
   
-  const newTab = window.open("about:blank", "_blank");
+  const siteCredits = [
+    { name: "Dominus_Elitus", role: "Owner of Dominum Network", desc: "Fish :D", img: "./src/assets/images/transparent-dominum.png" },
+    { name: "Bog", role: "Games And Game Ports", desc: "Credits to this guy for the game ports (Ultrakill, Tattletail, etc.) Also credits to NPA (National Porting Assosiation), GN-Math, and Truffled.lol.", img: "../src/assets/images/users/bog.gif" },
+    { name: "ZXS", role: "Dev Management", desc: "Basically made the entire site layout and made the games, apps, and proxy. Also a proxy developer, and owner of ZXS Games.", img: "./src/assets/images/users/zxs.png" }
+  ];
 
-  fetch(targetUrl)
-    .then(response => response.text())
-    .then(html => {
-      newTab.document.open();
-      newTab.document.write(html);
-      newTab.document.close();
-    })
-    .catch(err => {
-      console.error("Failed to load the launcher:", err);
-      newTab.location.href = targetUrl; 
+  const sitePartners = [
+    { name: "ProGS2Z", owner: "Swatt12 :/", desc: "A volcano full of games.", img: "./src/assets/images/partners/progs2z.png", discord: "https://discord.gg/CwtVutWYRj", website: "https://sites.google.com/view/prohomework2z" },
+    { name: "Pixel-X26", owner: "Pixel", desc: "The unblocked website for school.", img: "./src/assets/images/partners/pixel-x26.png", discord: "https://discord.gg/W59jgrbC", website: "https://sites.google.com/view/pi-26/%E2%84%8D" },
+    { name: "Games Unite", owner: "Mathias", desc: "Uniting Others Alike.", img: "./src/assets/images/partners/games-unite.png", discord: "https://discord.gg/5tYbGTYxQV", website: "https://sites.google.com/view/djnfjewio-jwmekmeg-get5rju-rww" },
+    { name: "Blood", owner: "Maybekbj", desc: "Be apart of something amazing.", img: "./src/assets/images/partners/blood.png", discord: "https://discord.gg/Cu2wxw8Qef", website: "https://sites.google.com/gwd50.org/kingstonhomework/home" },
+    { name: "ZXS Games", owner: "ZXS", desc: "UBG like never seen before.", img: "./src/assets/images/partners/zxs-games.png", discord: "https://discord.com/invite/mPJcQKy2s2", website: "https://zxsgames.vip/" },
+    { name: "Galaxy Hub", owner: "Alex", desc: "A great unblocked site.", img: "./src/assets/images/partners/gal-hub.png", discord: "https://discord.gg/D5RZRny7pD", website: "https://hubgal.my.canva.site/" },
+    { name: "Botulinum", owner: "Amelia_GamingZone", desc: "A cool site with a nice asthetic.", img: "./src/assets/images/partners/botulinum.png", discord: "https://discord.com/invite/XccT9zax", website: "https://sites.google.com/view/botulinum-/home" },
+    { name: "Mojmail Ink.", owner: "ProGS2Z", desc: "A Company made by ProGS2Z.", img: "./src/assets/images/partners/mojmail.png", discord: "none", website: "https://sites.google.com/view/mojmail-ink/home" },
+    { name: "Game Blitz", owner: "GameBlitz", desc: "A site with tons of visits.", img: "./src/assets/images/partners/game-blitz.png", discord: "https://linktr.ee/GameBlitz", website: "https://sites.google.com/view/www-clever-com" },
+    { name: "M3T4L", owner: "Dominus_Elitus", desc: "Endless options for unblocking.", img: "./src/assets/images/partners/m3t4l.png", discord: "https://discord.gg/nTVx9BMcYb", website: "https://sites.google.com/view/acgf-studentssmarts4you435d-2/home" },
+    { name: "ChillZone", owner: "DyingPoets", desc: "The best school entertainment site.", img: "./src/assets/images/partners/chillzone.png", discord: "https://discord.gg/DHx4VKwwkt", website: "https://sites.google.com/view/eduviewing" },
+    { name: "Unlocked Joy", owner: "Unlocked Joy", desc: "Unrestricted Game Site.", img: "./src/assets/images/partners/unlocked-joy.png", discord: "https://discord.gg/pyehknEkXj", website: "https://sites.google.com/view/unlockedjoy-site/home" },
+    { name: "チル・カーブ (Chill Kirb Central)", owner: "Øverłoaded", desc: "Everything you need on a chill site.", img: "./src/assets/images/partners/chill-kirb.gif", discord: "https://discord.gg/FuTy7Pej", website: "https://sites.google.com/view/fus3-bomb/home" },
+    { name: "GSites Entertainment (soon)", owner: "Owner Unknown", desc: "Endless options for unblocking.", img: "./src/assets/images/partners/soon.png", discord: "none", website: "none" },
+    { name: "Coffees Arcade", owner: "Coffee", desc: "Your site for games, proxies, and more.", img: "./src/assets/images/partners/coffees-arcade.png", discord: "https://discord.gg/7D6zGsGmUF", website: "https://sites.google.com/view/coffe-i-eat" },
+    { name: "Voidcore", owner: "Owner Unknown", desc: "The ultimate hangout spot.", img: "./src/assets/images/partners/voidcore.png", discord: "https://discord.gg/6ebkpjWDzz", website: "https://sites.google.com/view/v0idcore/home" },
+    { name: "Pulsar Proxy", owner: "Kilonøx (Yeti1o1)", desc: "Great ui with games and apps.", img: "./src/assets/images/partners/pulsar.png", discord: "https://discord.gg/9KKk4DNBPE", website: "https://pulsar.global.ssl.fastly.net/" },
+    { name: "Copyright Dragon", owner: "Owner Unknown", desc: "Im not sure its copyrighted yet.", img: "./src/assets/images/partners/c-dragon.png", discord: "none", website: "https://sites.google.com/view/copyright-dragon-" },
+    { name: "Sunset Learning", owner: "Sunset Learning", desc: "Sunset Learning is a site with tons of games, books, apps, movies, and more.", img: "./src/assets/images/partners/sunset-learning.png", discord: "https://discord.gg/kStXJcQ8np", website: "https://sites.google.com/view/sunsetlearninn/" },
+    { name: "Unblocked Makers", owner: "Jacorn And Maddox", desc: "The best place to find tons of unblocked websites, including the one you`re on now.", img: "./src/assets/images/partners/unblocked-makers.png", discord: "https://discord.gg/uvuNAzrhWc", website: "https://ubghub.org/" },
+    { name: "DuckMath", owner: "JaCorn And Maddox", desc: "Offering 200+ games, a compeditive leaderboard, custom profiles, and more.", img: "./src/assets/images/partners/duckmath.gif", discord: "https://discord.gg/EVNRkBfqrR", website: "https://duckmath.org" },
+    { name: "Orbit (Shut down)", owner: "OJ (Astr0Cat)", desc: "Does this site even have a description anymore??", img: "./src/assets/images/partners/orbit.png", discord: "https://discord.gg/UnG9qrfW", website: "https://orbit.nekoweb.org/" },
+    { name: "Vortex", owner: "Idk the owner but the Co-Owner is Gmanchew99", desc: "Chat with your friends at school.", img: "./src/assets/images/partners/vortex.png", discord: "https://discord.gg/vtex", website: "https://vortexos.net/" },
+    { name: "CookingWithJay (Ultra)", owner: "Jay", desc: "Cooking up games for your entertainment.", img: "./src/assets/images/partners/cwj-ultra.png", discord: "none", website: "https://sites.google.com/view/cookingwitjay-ultra/" },
+    { name: "Bloxcraft", owner: "Bloxcraft Studios", desc: "An unblocked games site you can play every day.", img: "./src/assets/images/partners/bloxcraft.png", discord: "https://discord.gg/sqPFYEsz8F", website: "https://bloxcraft-ubg.pages.dev/" },
+    { name: "UNB History", owner: "TVM (emp56)", desc: "Every day is a new chance to improve and build more immersive digital experiences.", img: "./src/assets/images/partners/unb-history.png", discord: "none", website: "https://sites.google.com/stu.palmbeachschools.org/learn-play-adapt" },
+    { name: "Axiom Proxy", owner: "Arson (imdonewithdc)", desc: "An amazing webos proxy with a sleek feeling.", img: "./src/assets/images/partners/axiom.png", discord: "https://discord.gg/A2AZb8SgCD", website: "https://cars.axiomsontop.shop/" },
+    { name: "1Key", owner: "Builder267|595k", desc: "pls use 1key", img: "./src/assets/images/partners/1key.gif", discord: "https://discord.gg/jrtpTfZu", website: "https://1key.lol/" }
+  ];
+
+  function renderCredits() {
+    const container = document.getElementById('credits-container');
+    container.innerHTML = '';
+    siteCredits.forEach(credit => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = () => openProfile(credit.name, credit.role, credit.desc, credit.img);
+      card.innerHTML = `
+        <img src="${credit.img}" alt="${credit.name}">
+        <div class="card-content">
+          <h3>${credit.name}</h3>
+          <p class="role">${credit.role}</p>
+          <p class="desc">${credit.desc}</p>
+        </div>
+      `;
+      container.appendChild(card);
     });
-}
-
-function openGamePorts() {
-  if (window.parent && window.parent.document.getElementById("content-frame")) {
-    window.parent.document.getElementById("content-frame").src = "/src/assets/pages/gam3-ports.html";
-  } else {
-    window.location.href = "/src/assets/pages/gam3-ports.html";
   }
-}
 
-function openDataGen() {
-  if (window.parent && window.parent.document.getElementById("content-frame")) {
-    window.parent.document.getElementById("content-frame").src = "/src/assets/pages/data-generator.html";
-  } else {
-    window.location.href = "/src/assets/pages/data-generator.html";
+  function renderPartners() {
+    const container = document.getElementById('partners-container');
+    container.innerHTML = '';
+    sitePartners.forEach(partner => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = () => handlePartnerClick(partner.name, partner.owner, partner.desc, partner.img, partner.discord, partner.website);
+      card.innerHTML = `
+        <img src="${partner.img}" alt="${partner.name}">
+        <div class="card-content">
+          <h3>${partner.name}</h3>
+          <p class="role">Owned by: ${partner.owner}</p>
+          <p class="desc">${partner.desc}</p>
+        </div>
+      `;
+      container.appendChild(card);
+    });
   }
-}
+
+  renderCredits();
+  renderPartners();
+
+  let currentPartner = {};
+  
+  function openModal(id) { 
+    document.getElementById(id).classList.add('active'); 
+  }
+  
+  function closeModal(id) { 
+    document.getElementById(id).classList.remove('active'); 
+  }
+  
+  document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { 
+    if(e.target === m) closeModal(m.id); 
+  }));
+  
+  function openProfile(name, role, desc, img) {
+    document.getElementById('profile-name').innerText = name;
+    document.getElementById('profile-role').innerText = role;
+    document.getElementById('profile-desc').innerText = desc;
+    document.getElementById('profile-img').src = img;
+    openModal('profile-modal');
+  }
+  
+  function handlePartnerClick(name, owner, desc, img, discord, website) {
+    if ((!discord || discord === 'none') && website && website !== 'none') {
+      window.open(website, '_blank');
+      return;
+    }
+    if ((!website || website === 'none') && discord && discord !== 'none') {
+      window.open(discord, '_blank');
+      return;
+    }
+    if ((!website || website === 'none') && (!discord || discord === 'none')) {
+      alert("No links provided for this partner yet!");
+      return;
+    }
+    
+    currentPartner = { name, discord, website };
+    document.getElementById('partner-name').innerText = name;
+    
+    const dBtn = document.getElementById('discord-btn');
+    const wBtn = document.getElementById('website-btn');
+    
+    dBtn.style.display = (discord && discord !== 'none') ? 'inline-block' : 'none';
+    wBtn.style.display = (website && website !== 'none') ? 'inline-block' : 'none';
+    
+    openModal('partner-link-modal');
+  }
+  
+  document.getElementById('discord-btn').addEventListener('click', () => {
+    closeModal('partner-link-modal');
+    if(currentPartner.discord && currentPartner.discord !== 'none') window.open(currentPartner.discord, '_blank');
+  });
+  
+  document.getElementById('website-btn').addEventListener('click', () => {
+    closeModal('partner-link-modal');
+    if(currentPartner.website && currentPartner.website !== 'none') window.open(currentPartner.website, '_blank');
+  });
+
+  function openEmbed(url){
+    closeModal('vortex-modal');
+    const embedContainer = document.getElementById('embed-container');
+    const iframe = document.getElementById('embed-frame');
+    iframe.src = url;
+    embedContainer.style.display = 'block';
+  }
+  
+  function closeEmbed(){
+    const embedContainer = document.getElementById('embed-container');
+    const iframe = document.getElementById('embed-frame');
+    iframe.src = '';
+    embedContainer.style.display = 'none';
+  }
+
+  (function() {
+    const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
+    const particlesContainer = document.getElementById('particles-js');
+    if (particlesEnabled) {
+      particlesContainer.style.display = 'block';
+      particlesJS("particles-js", {
+        "particles": {
+          "number": { "value": 60 },
+          "color": { "value": ["#7a5cff", "#00bfff"] },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.5 },
+          "size": { "value": 2 },
+          "line_linked": { "enable": true, "distance": 130, "color": "#7a5cff", "opacity": 0.2, "width": 1 },
+          "move": { "enable": true, "speed": 1.2, "direction": "none", "out_mode": "out" }
+        },
+        "interactivity": {
+          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": false } },
+          "modes": { "repulse": { "distance": 100 } }
+        },
+        "retina_detect": true
+      });
+    } else {
+      particlesContainer.style.display = 'none';
+    }
+  })();
+
+  const root = document.documentElement;
+  const themes = {
+    default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff","--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
+    cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
+    sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6","--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
+    neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
+    darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6","--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
+    dnv2:{"--bg":"#050007","--accent":"#ff00de","--blue":"#00fff7","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.15)","--card-bg":"rgba(15,0,30,0.7)"},
+    matrix:{"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99","--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+  };
+
+  function applyTheme(theme){
+    Object.entries(theme).forEach(([v,k])=>root.style.setProperty(v,k));
+    try {
+      const frame = document.getElementById("content-frame");
+      if(frame) Object.entries(theme).forEach(([v,k])=>frame.contentWindow.document.documentElement.style.setProperty(v,k));
+    } catch(e){}
+  }
+
+  function loadTheme(){
+    const name = localStorage.getItem("dominum-theme") || "default";
+    if(name === "custom"){
+      const t = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
+      applyTheme(t);
+    } else {
+      applyTheme(themes[name] || themes['default']);
+    }
+  }
+
+  try {
+    const themeVars = window.parent.document.documentElement.style;
+    for(let i=0; i<themeVars.length; i++){
+      const p = themeVars[i];
+      document.documentElement.style.setProperty(p, themeVars.getPropertyValue(p));
+    }
+  } catch(e){}
+
+  loadTheme();
+
+  function openEaglerLauncher() {
+    const targetUrl = "./src/assets/pages/ampler-launcher.html"; 
+    const newTab = window.open("about:blank", "_blank");
+    fetch(targetUrl)
+      .then(response => response.text())
+      .then(html => {
+        newTab.document.open();
+        newTab.document.write(html);
+        newTab.document.close();
+      })
+      .catch(err => {
+        console.error("Failed to load the launcher:", err);
+        newTab.location.href = targetUrl; 
+      });
+  }
+
+  function openGamePorts() {
+    if (window.parent && window.parent.document.getElementById("content-frame")) {
+      window.parent.document.getElementById("content-frame").src = "./src/assets/pages/gam3-ports.html";
+    } else {
+      window.location.href = "./src/assets/pages/gam3-ports.html";
+    }
+  }
+
+  function openDataGen() {
+    if (window.parent && window.parent.document.getElementById("content-frame")) {
+      window.parent.document.getElementById("content-frame").src = "./src/assets/pages/data-generator.html";
+    } else {
+      window.location.href = "./src/assets/pages/data-generator.html";
+    }
+  }
 </script>
 </body>
 </html>

@@ -4,28 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data URL Generator - Dominum</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
 <style>
   :root {
     --bg: #0b0a16;
     --accent: #7a5cff;
     --blue: #00bfff;
     --text: #e6e6ff;
-    
-    --surface: rgba(255,255,255,0.05);
-    --border: rgba(255,255,255,0.1);
-    --card-bg: rgba(255,255,255,0.03);
+    --surface: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
   }
-
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    outline: none;
   }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -34,7 +29,6 @@
     min-height: 100vh;
     width: 100vw;
   }
-
   #particles-js {
     position: fixed;
     width: 100%;
@@ -43,355 +37,325 @@
     left: 0;
     z-index: 0;
   }
-
   .content {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 100vh;
     text-align: center;
-    padding: 40px 20px;
+    padding: 60px 20px;
   }
-
   h1 {
-    color: var(--accent);
+    color: var(--text);
     font-size: 3em;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     margin-bottom: 10px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(122, 92, 255, 0.3);
+    animation: fadeDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-
-  p {
-    color: var(--blue);
+  p.subtitle {
+    color: var(--text);
     font-size: 1em;
-    margin-top: 10px;
-    opacity: 0.8;
-    max-width: 600px;
-  }
-
-  .shortcuts {
-    margin-top: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-    justify-content: center;
-  }
-
-  .shortcut {
-    padding: 10px 22px;
-    border: 1px solid var(--accent);
-    border-radius: 30px;
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.9em;
+    opacity: 0.7;
+    margin-bottom: 40px;
     letter-spacing: 1px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.03);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+    animation: fadeDown 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-
-  .shortcut i {
-    font-size: 1em;
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
-  .shortcut:hover {
-    color: var(--blue);
-    border-color: var(--blue);
-    transform: translateY(-2px);
-    box-shadow: 0 0 10px var(--blue);
-  }
-  
   .generator-container {
     width: 100%;
     max-width: 900px;
-    margin-top: 30px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-    backdrop-filter: blur(5px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
-
-  .generator-container label {
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
     text-align: left;
-    font-size: 1em;
-    color: var(--blue);
+    gap: 10px;
+  }
+  label {
+    font-size: 1.1em;
+    color: var(--text);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     padding-left: 5px;
   }
-
   .data-textarea {
     width: 100%;
-    background: var(--card-bg);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
     color: var(--text);
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 0.95em;
     resize: vertical;
-    min-height: 150px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-height: 180px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
-
   .data-textarea:focus {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 10px var(--blue);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(122, 92, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
   }
-  
   .data-textarea::placeholder {
-      color: rgba(255, 255, 255, 0.4);
-      font-family: 'Orbitron', sans-serif;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: 'Orbitron', sans-serif;
   }
-
-  #generateBtn {
-    align-self: center;
-    padding: 12px 30px;
+  .btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .primary-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 14px 35px;
+    border-radius: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
     font-size: 1.1em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .primary-btn:hover {
     background: var(--accent);
     color: var(--bg);
-    font-weight: 600;
-    border: none;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(122, 92, 255, 0.4);
   }
-
-  #generateBtn:hover {
-    background: var(--blue);
-    color: var(--bg);
-    box-shadow: 0 0 15px var(--blue);
-    transform: translateY(-2px);
-  }
-  
   .output-container {
-      position: relative;
-      width: 100%;
-      display: flex;
+    position: relative;
+    width: 100%;
+    display: flex;
   }
-  
   .output-container .data-textarea {
-      padding-right: 60px;
+    padding-right: 70px;
   }
-  
   .copy-button {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      padding: 8px 12px;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(5px);
-      z-index: 2;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
-  
   .copy-button:hover {
-      background: var(--accent);
-      color: var(--text);
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
   }
-  
   #copyMessage {
-      color: var(--blue);
-      font-size: 0.9em;
-      height: 1.2em;
-      transition: opacity 0.3s ease;
-      opacity: 0;
-      margin-top: 5px;
+    color: var(--accent);
+    font-size: 0.95em;
+    height: 1.2em;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    margin-top: 5px;
+    text-align: center;
   }
-
+  .shortcuts {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    animation: slideUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+  }
+  .shortcut {
+    padding: 14px 28px;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1em;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .shortcut:hover {
+    background: rgba(122, 92, 255, 0.1);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(122, 92, 255, 0.3);
+  }
 </style>
 </head>
 <body>
 
-  <div id="particles-js"></div>
+<div id="particles-js"></div>
 
-  <div class="content">
+<div class="content">
+  <h1>HTML to Data URL</h1>
+  <p class="subtitle">Convert any HTML code into a Base64-encoded Data URL instantly.</p>
 
-    <h1>HTML to Data URL</h1>
-    <p>Paste any HTML code into the input box and click "Generate" to create a Base64-encoded data URL.</p>
-
-    <div class="generator-container">
-      
+  <div class="generator-container">
+    <div class="input-group">
       <label for="htmlInput">HTML Input</label>
-      <textarea id="htmlInput" class="data-textarea" rows="10" placeholder="<html>
-  <head>
-    <title>My Page</title>
-  </head>
-  <body>
-    <h1>Hello, World!</h1>
-  </body>
-</html>"></textarea>
-      
-      <button id="generateBtn" class="shortcut"><i class="fa-solid fa-bolt"></i> Generate</button>
-      
+      <textarea id="htmlInput" class="data-textarea" rows="10" placeholder="<html>&#10;  <head>&#10;    <title>My Page</title>&#10;  </head>&#10;  <body>&#10;    <h1>Hello, World!</h1>&#10;  </body>&#10;</html>"></textarea>
+    </div>
+    
+    <div class="btn-wrapper">
+      <button id="generateBtn" class="primary-btn"><i class="fa-solid fa-bolt"></i> Generate</button>
+    </div>
+    
+    <div class="input-group">
       <label for="dataUrlOutput">Data URL Output</label>
       <div class="output-container">
         <textarea id="dataUrlOutput" class="data-textarea" rows="6" placeholder="Your data URL will appear here..." readonly></textarea>
-        <button id="copyBtn" class="shortcut copy-button" title="Copy to Clipboard">
+        <button id="copyBtn" class="copy-button" title="Copy to Clipboard">
           <i class="fa-solid fa-copy"></i>
         </button>
       </div>
-      
       <span id="copyMessage">Copied!</span>
-
     </div>
-
-    <div class="shortcuts">
-      <a onclick="openHomePage()" class="shortcut"><i class="fa-solid fa-house"></i> Back to Home</a>
-    </div>
-
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    (function() {
-      const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
-      const particlesContainer = document.getElementById('particles-js');
+  <div class="shortcuts">
+    <a onclick="openHomePage()" class="shortcut"><i class="fa-solid fa-house"></i> Back to Home</a>
+  </div>
+</div>
 
-      if (particlesEnabled) {
-        particlesContainer.style.display = 'block';
-        particlesJS("particles-js", {
-          "particles": {
-            "number": { "value": 60 },
-            "color": { "value": ["#7a5cff", "#00bfff"] },
-            "shape": { "type": "circle" },
-            "opacity": { "value": 0.5 },
-            "size": { "value": 2 },
-            "line_linked": {
-              "enable": true,
-              "distance": 130,
-              "color": "#7a5cff",
-              "opacity": 0.2,
-              "width": 1
-            },
-            "move": {
-              "enable": true,
-              "speed": 1.2,
-              "direction": "none",
-              "out_mode": "out"
-            }
-          },
-          "interactivity": {
-            "events": {
-              "onhover": { "enable": true, "mode": "repulse" },
-              "onclick": { "enable": false }
-            },
-            "modes": { "repulse": { "distance": 100 } }
-          },
-          "retina_detect": true
-        });
-      } else {
-        particlesContainer.style.display = 'none';
-      }
-    })();
-  </script>
-  <script>
-  const root = document.documentElement;
-  const themes = {
-    default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
-            "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
-    cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
-           "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
-    sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
-            "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
-    neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
-          "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
-    darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
-             "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-    dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
-           "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
-    matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
-            "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
-  };
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+(function() {
+  const particlesEnabled = localStorage.getItem('dominum-particles') !== 'false';
+  const particlesContainer = document.getElementById('particles-js');
 
-  function applyTheme(theme){
-    Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
-  }
-
-  (function(){
-    const name = localStorage.getItem("dominum-theme") || "default";
-    if(name === "custom"){
-      const custom = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
-      applyTheme(custom);
-    } else applyTheme(themes[name]);
-  })();
-  </script>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const generateBtn = document.getElementById('generateBtn');
-      const copyBtn = document.getElementById('copyBtn');
-      const htmlInput = document.getElementById('htmlInput');
-      const dataUrlOutput = document.getElementById('dataUrlOutput');
-      const copyMessage = document.getElementById('copyMessage');
-
-      generateBtn.addEventListener('click', () => {
-        const htmlContent = htmlInput.value;
-        if (!htmlContent) {
-          dataUrlOutput.value = "Error: Input is empty.";
-          return;
-        }
-        
-        try {
-          const encodedHtml = btoa(unescape(encodeURIComponent(htmlContent)));
-          const dataUrl = `data:text/html;base64,${encodedHtml}`;
-          dataUrlOutput.value = dataUrl;
-          
-        } catch (e) {
-          console.error("Encoding error:", e);
-          dataUrlOutput.value = `Error: Could not encode content. ${e.message}`;
-        }
-      });
-
-      copyBtn.addEventListener('click', () => {
-        const outputValue = dataUrlOutput.value;
-        if (!outputValue || outputValue.startsWith("Error:")) {
-          showCopyMessage("Nothing to copy!", true);
-          return;
-        }
-        
-        navigator.clipboard.writeText(outputValue).then(() => {
-          showCopyMessage("Copied to clipboard!", false);
-        }).catch(err => {
-          showCopyMessage("Failed to copy.", true);
-          console.error('Failed to copy: ', err);
-        });
-      });
-      
-      function showCopyMessage(message, isError) {
-          copyMessage.textContent = message;
-          copyMessage.style.color = isError ? '#ff6b6b' : 'var(--blue)';
-          copyMessage.style.opacity = 1;
-          
-          setTimeout(() => {
-              copyMessage.style.opacity = 0;
-          }, 2000);
-      }
+  if (particlesEnabled) {
+    particlesContainer.style.display = 'block';
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 60 },
+        "color": { "value": ["#7a5cff", "#00bfff"] },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5 },
+        "size": { "value": 2 },
+        "line_linked": { "enable": true, "distance": 130, "color": "#7a5cff", "opacity": 0.2, "width": 1 },
+        "move": { "enable": true, "speed": 1.2, "direction": "none", "out_mode": "out" }
+      },
+      "interactivity": {
+        "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": false } },
+        "modes": { "repulse": { "distance": 100 } }
+      },
+      "retina_detect": true
     });
-
-    function openGamePorts() {
-        if (window.parent && window.parent.document.getElementById("content-frame")) {
-            window.parent.document.getElementById("content-frame").src = "/assets/pages/home.html";
-        } else {
-            window.location.href = "/assets/pages/home.html";
-        }
-    }
-
-  function openHomePage() {
-    if (window.parent && window.parent.document.getElementById("content-frame")) {
-      window.parent.document.getElementById("content-frame").src = "/assets/pages/home.html";
-    } else {
-      window.location.href = "/assets/pages/home.html";
-    }
+  } else {
+    particlesContainer.style.display = 'none';
   }
-  </script>
+})();
+</script>
+<script>
+const root = document.documentElement;
+const themes = {
+  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff","--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)"},
+  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)"},
+  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6","--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)"},
+  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)"},
+  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6","--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)"},
+  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff","--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)"},
+  matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99","--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)"}
+};
+
+function applyTheme(theme){
+  Object.entries(theme).forEach(([k,v])=>root.style.setProperty(k,v));
+}
+
+(function(){
+  const name = localStorage.getItem("dominum-theme") || "default";
+  if(name === "custom"){
+    const custom = JSON.parse(localStorage.getItem("dominum-custom-theme") || "{}");
+    applyTheme(custom);
+  } else applyTheme(themes[name]);
+})();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const generateBtn = document.getElementById('generateBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const htmlInput = document.getElementById('htmlInput');
+  const dataUrlOutput = document.getElementById('dataUrlOutput');
+  const copyMessage = document.getElementById('copyMessage');
+
+  generateBtn.addEventListener('click', () => {
+    const htmlContent = htmlInput.value;
+    if (!htmlContent) {
+      dataUrlOutput.value = "Error: Input is empty.";
+      return;
+    }
+    try {
+      const encodedHtml = btoa(unescape(encodeURIComponent(htmlContent)));
+      const dataUrl = `data:text/html;base64,${encodedHtml}`;
+      dataUrlOutput.value = dataUrl;
+    } catch (e) {
+      dataUrlOutput.value = `Error: Could not encode content. ${e.message}`;
+    }
+  });
+
+  copyBtn.addEventListener('click', () => {
+    const outputValue = dataUrlOutput.value;
+    if (!outputValue || outputValue.startsWith("Error:")) {
+      showCopyMessage("Nothing to copy!", true);
+      return;
+    }
+    navigator.clipboard.writeText(outputValue).then(() => {
+      showCopyMessage("Copied to clipboard!", false);
+    }).catch(err => {
+      showCopyMessage("Failed to copy.", true);
+    });
+  });
+  
+  function showCopyMessage(message, isError) {
+      copyMessage.textContent = message;
+      copyMessage.style.color = isError ? '#ff6b6b' : 'var(--accent)';
+      copyMessage.style.opacity = 1;
+      setTimeout(() => { copyMessage.style.opacity = 0; }, 2000);
+  }
+});
+
+function openHomePage() {
+  if (window.parent && window.parent.document.getElementById("content-frame")) {
+    window.parent.document.getElementById("content-frame").src = "/src/assets/pages/home.html";
+  } else {
+    window.location.href = "/src/assets/pages/home.html";
+  }
+}
+</script>
 </body>
 </html>

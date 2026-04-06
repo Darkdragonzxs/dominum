@@ -3,158 +3,220 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Game Ports - Dominum</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
   :root {
-    --primary: #6f42c1;
-    --primary-hover: #5936a6;
-    --accent: #f6c90e;
-    --text: #e6e6fa;
-    --bg: #1a1030;
-    --border: #3b2a65;
-    --radius: 12px;
+    --bg: #0b0a16;
+    --accent: #7a5cff;
+    --blue: #00bfff;
+    --text: #e6e6ff;
+    --surface: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
   }
-
+  * { box-sizing: border-box; outline: none; }
   body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     margin: 0;
-    padding: 1rem;
+    padding: 2rem;
+    overflow-x: hidden;
   }
-
-  #searchBar {
-    width: 100%;
-    max-width: 500px;
-    padding: 0.875rem 1rem;
-    border: 0;
-    border-radius: var(--radius);
-    background: rgba(255,255,255,0.1);
+  .controls-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 2.5rem;
+    padding: 20px;
+    background: var(--surface);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    animation: slideDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .control-input {
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
     color: var(--text);
-    font-size: 15px;
-    outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
-
-  #searchBar:focus {
-    background: #fff;
-    color: var(--bg);
-    transform: translateY(-1px);
+  .control-input:hover { border-color: rgba(255, 255, 255, 0.2); }
+  .control-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(122, 92, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
   }
-
+  #searchBar { flex: 1 1 250px; }
   #container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
   }
-
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
   .zone-item {
-    background: var(--card-bg);
+    background: var(--surface);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 16px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    opacity: 0; 
+    animation: popIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   }
-
   .zone-item:hover {
-    transform: translateY(-4px);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(122, 92, 255, 0.2);
+    border-color: var(--accent);
+    z-index: 2;
   }
-
-  .zone-item img {
+  .img-wrapper {
     width: 100%;
     aspect-ratio: 1;
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.3);
+  }
+  .zone-item img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
-
+  .zone-item:hover img { transform: scale(1.15); }
   .zone-item button {
-    padding: 0.75rem;
+    padding: 1rem 0.8rem;
     border: none;
     background: transparent;
     color: var(--text);
-    font-weight: 600;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
     cursor: pointer;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s ease;
   }
-
-  #fullscreenOverlay {
+  .zone-item:hover button { color: var(--accent); }
+  #modalOverlay {
     position: fixed;
     inset: 0;
-    background: #000;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     display: none;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     z-index: 2000;
-    height: 100vh;
-    width: 100vw;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease forwards;
   }
-
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #gameModal {
+    width: 100%;
+    max-width: 1200px;
+    height: 85vh;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    transform: scale(0.95);
+    animation: modalPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @keyframes modalPop { to { transform: scale(1); } }
   #fullscreenHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background: rgba(0,0,0,0.6);
-    color: #fff;
+    padding: 1.2rem 2rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--border);
   }
-
-  .header-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin-left: 0.5rem;
-  }
-
   #gameTitle {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
-
-  #zoneFullscreenFrame {
-    flex: 1;
-    width: 100%;
-    border: none;
+  .header-controls { display: flex; gap: 12px; }
+  .header-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  .header-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(122, 92, 255, 0.4);
+  }
+  #zoneFullscreenFrame { flex: 1; width: 100%; border: none; background: #000; }
 </style>
 </head>
 <body>
-<input type="text" id="searchBar" placeholder="Search game ports..." oninput="filterZones()">
+
+<div class="controls-wrapper">
+  <input type="text" id="searchBar" class="control-input" placeholder="Search game ports..." oninput="filterZones()">
+</div>
+
 <div id="container">Loading...</div>
 
-<div id="fullscreenOverlay">
-  <div id="fullscreenHeader">
-    <h2 id="gameTitle">Game Title</h2>
-    <div>
-      <button id="fullscreenBtn" class="header-btn" title="Fullscreen">
-        <i class="fas fa-expand"></i>
-      </button>
-      <button id="closeFullscreen" class="header-btn" title="Close">
-        <i class="fas fa-times"></i>
-      </button>
+<div id="modalOverlay">
+  <div id="gameModal">
+    <div id="fullscreenHeader">
+      <h2 id="gameTitle">Game Title</h2>
+      <div class="header-controls">
+        <button id="fullscreenBtn" class="header-btn" title="Fullscreen"><i class="fas fa-expand"></i></button>
+        <button id="closeFullscreen" class="header-btn" title="Close"><i class="fas fa-times"></i></button>
+      </div>
     </div>
+    <iframe id="zoneFullscreenFrame"></iframe>
   </div>
-  <iframe id="zoneFullscreenFrame"></iframe>
 </div>
 
 <script>
 const container = document.getElementById('container');
 const searchBar = document.getElementById('searchBar');
-const overlay = document.getElementById('fullscreenOverlay');
+const overlay = document.getElementById('modalOverlay');
 const iframe = document.getElementById('zoneFullscreenFrame');
 const closeBtn = document.getElementById('closeFullscreen');
 const gameTitle = document.getElementById('gameTitle');
 const fullscreenBtn = document.getElementById('fullscreenBtn');
 
-const zonesURLs = [
-  "https://cdn.jsdelivr.net/gh/DominumNetwork/assets@main/zones.json"
-];
-
+const zonesURLs = ["https://cdn.jsdelivr.net/gh/DominumNetwork/assets@main/zones.json"];
 const coverURL = "https://cdn.jsdelivr.net/gh/DominumNetwork/covers@main/";
 const htmlURL  = "https://cdn.jsdelivr.net/gh/DominumNetwork/html@main";
 
@@ -166,48 +228,10 @@ async function loadZones() {
     const response = await fetch(zonesURL);
     zones = await response.json();
     zones = zones.filter(zone => zone.id >= 0 && zone.id <= 9999);
-    displayZones();
+    displayFiltered(zones);
   } catch (e) {
-    container.innerHTML = 'Failed to load game ports.';
-    console.error(e);
+    container.innerHTML = '<div style="width:100%; text-align:center; padding: 2rem; color: #ff4444;">Failed to load game ports.</div>';
   }
-}
-
-function displayZones() {
-  container.innerHTML = '';
-  zones.forEach(zone => {
-    const item = document.createElement('div');
-    item.className = 'zone-item';
-
-    const img = document.createElement('img');
-    img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL);
-    img.alt = zone.name;
-    img.loading = 'lazy';
-
-    const btn = document.createElement('button');
-    btn.textContent = zone.name;
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      openZone(zone);
-    };
-
-    item.onclick = () => openZone(zone);
-    item.appendChild(img);
-    item.appendChild(btn);
-    container.appendChild(item);
-  });
-
-  const imgs = document.querySelectorAll('img[data-src]');
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const img = e.target;
-        img.src = img.dataset.src;
-        obs.unobserve(img);
-      }
-    });
-  }, { rootMargin: '100px', threshold: 0.1 });
-  imgs.forEach(i => observer.observe(i));
 }
 
 function filterZones() {
@@ -218,9 +242,20 @@ function filterZones() {
 
 function displayFiltered(filteredZones) {
   container.innerHTML = '';
-  filteredZones.forEach(zone => {
+  if (filteredZones.length === 0) {
+    container.innerHTML = '<div style="width:100%; text-align:center; padding: 2rem; color: var(--text); opacity: 0.7;">No game ports found.</div>';
+    return;
+  }
+
+  filteredZones.forEach((zone, index) => {
     const item = document.createElement('div');
     item.className = 'zone-item';
+    
+    const delay = Math.min(index * 0.03, 1.5);
+    item.style.animationDelay = `${delay}s`;
+
+    const imgWrapper = document.createElement('div');
+    imgWrapper.className = 'img-wrapper';
 
     const img = document.createElement('img');
     img.dataset.src = zone.cover.replace('{COVER_URL}', coverURL);
@@ -229,13 +264,12 @@ function displayFiltered(filteredZones) {
 
     const btn = document.createElement('button');
     btn.textContent = zone.name;
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      openZone(zone);
-    };
-
+    
     item.onclick = () => openZone(zone);
-    item.appendChild(img);
+    btn.onclick = (e) => { e.stopPropagation(); openZone(zone); };
+
+    imgWrapper.appendChild(img);
+    item.appendChild(imgWrapper);
     item.appendChild(btn);
     container.appendChild(item);
   });
@@ -258,10 +292,7 @@ async function openZone(zone) {
   gameTitle.textContent = zone.name;
 
   const zoneUrl = zone.url;
-  if (!zoneUrl) {
-    alert('Game URL missing.');
-    return;
-  }
+  if (!zoneUrl) return;
 
   const isAbsolute = zoneUrl.startsWith('http');
   if (isAbsolute) {
@@ -276,7 +307,6 @@ async function openZone(zone) {
       iframe.src = blobUrl;
       iframe.onload = () => URL.revokeObjectURL(blobUrl);
     } catch (e) {
-      console.error('Blob load failed, falling back to direct URL:', e);
       iframe.src = fullUrl;
     }
   }
@@ -286,6 +316,10 @@ closeBtn.onclick = () => {
   overlay.style.display = 'none';
   iframe.src = '';
 };
+
+overlay.onclick = (e) => {
+  if (e.target === overlay) closeBtn.click();
+}
 
 fullscreenBtn.onclick = () => {
   iframe.requestFullscreen().catch(() => alert('Fullscreen not supported.'));
@@ -297,20 +331,13 @@ loadZones();
 <script>
 const root = document.documentElement;
 const themes = {
-  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff",
-           "--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)","--card-bg":"rgba(255,255,255,0.03)"},
-  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0",
-         "--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)","--card-bg":"rgba(0,255,0,0.03)"},
-  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6",
-          "--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)","--card-bg":"rgba(255,110,100,0.03)"},
-  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff",
-        "--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)","--card-bg":"rgba(255,0,255,0.03)"},
-  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6",
-           "--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)","--card-bg":"rgba(255,0,0,0.03)"},
-  dnv2:{"--bg": "#050007","--accent": "#ff00de","--blue": "#00fff7","--text": "#ffffff",
-         "--surface": "rgba(255, 0, 255, 0.05)","--border": "rgba(255, 0, 255, 0.15)","--card-bg": "rgba(15, 0, 30, 0.7)"},
-  matrix: {"--bg": "#001100","--accent": "#00ff00","--blue": "#33ff33","--text": "#99ff99",
-         "--surface": "rgba(0, 255, 0, 0.05)","--border": "rgba(0, 255, 0, 0.15)","--card-bg": "rgba(0, 50, 0, 0.7)"}
+  default:{"--bg":"#0b0a16","--accent":"#7a5cff","--blue":"#00bfff","--text":"#e6e6ff","--surface":"rgba(255,255,255,0.05)","--border":"rgba(255,255,255,0.1)"},
+  cyber:{"--bg":"#050c1b","--accent":"#39ff14","--blue":"#00ffff","--text":"#e0ffe0","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.1)"},
+  sunset:{"--bg":"#1a0b0b","--accent":"#ff6f61","--blue":"#ffa500","--text":"#fff0e6","--surface":"rgba(255,110,100,0.05)","--border":"rgba(255,110,100,0.1)"},
+  neon:{"--bg":"#0f0020","--accent":"#ff00ff","--blue":"#00ffff","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.1)"},
+  darkred:{"--bg":"#1b0000","--accent":"#ff0000","--blue":"#cc0000","--text":"#ffe6e6","--surface":"rgba(255,0,0,0.05)","--border":"rgba(255,0,0,0.1)"},
+  dnv2:{"--bg":"#050007","--accent":"#ff00de","--blue":"#00fff7","--text":"#ffffff","--surface":"rgba(255,0,255,0.05)","--border":"rgba(255,0,255,0.15)"},
+  matrix:{"--bg":"#001100","--accent":"#00ff00","--blue":"#33ff33","--text":"#99ff99","--surface":"rgba(0,255,0,0.05)","--border":"rgba(0,255,0,0.15)"}
 };
 
 function applyTheme(theme){

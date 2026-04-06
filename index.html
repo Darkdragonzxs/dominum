@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dominum</title>
-<link rel="icon" href="/src/assets/images/transparent-dominum.png">
+<link rel="icon" href="./src/assets/images/transparent-dominum.png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <meta name="description" content="A proxy site with many promising features :D - Also Fish" />
@@ -12,12 +12,12 @@
 <meta property="og:url" content="" id="og-url" />
 <meta property="og:title" content="Dominum" />
 <meta property="og:description" content="A proxy site with many promising features :D - Also Fish" />
-<meta property="og:image" content="/assets/images/transparent-dominum.png" />
+<meta property="og:image" content="./src/assets/images/transparent-dominum.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content="" id="twitter-url" />
 <meta name="twitter:title" content="Dominum" />
 <meta name="twitter:description" content="A proxy site with many promising features :D - Also Fish" />
-<meta name="twitter:image" content="/assets/images/transparent-dominum.png" />
+<meta name="twitter:image" content="./src/assets/images/transparent-dominum.png" />
 
 <style>
   :root {
@@ -25,6 +25,9 @@
     --accent: #7a5cff;
     --blue: #00bfff;
     --text: #e6e6ff;
+    --surface: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.03);
   }
 
   * {
@@ -35,22 +38,43 @@
 
   body {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     background: var(--bg);
     color: var(--text);
     font-family: 'Orbitron', sans-serif;
     overflow: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(122, 92, 255, 0.05) 0%, transparent 60%);
+    z-index: 0;
+    pointer-events: none;
   }
 
   aside {
-    width: 70px;
-    background: rgba(255, 255, 255, 0.03);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 10;
+    width: 76px;
+    height: calc(100vh - 40px);
+    margin: 20px;
+    background: var(--surface);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     padding: 30px 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   }
 
   .sidebar-top,
@@ -58,28 +82,96 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    gap: 20px;
+    width: 100%;
   }
 
-  aside i {
-    font-size: 1.4em;
+  .nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     color: var(--text);
-    transition: color 0.3s ease, transform 0.3s ease;
+    background: transparent;
   }
 
-  aside i:hover {
+  .nav-item i {
+    font-size: 1.35em;
+    transition: all 0.3s ease;
+  }
+
+  .nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
     color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  .nav-item.active {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 15px rgba(122, 92, 255, 0.5);
+  }
+
+  .nav-item.active i {
     transform: scale(1.1);
   }
 
-  iframe {
-    flex: 1;
-    border: none;
-    width: 100%;
-    height: 100vh;
+  .nav-item::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translate(10px, -50%) scale(0.9);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.8em;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 20;
+  }
+
+  .nav-item:hover::after {
     opacity: 1;
-    transition: opacity 0.4s ease;
+    transform: translate(25px, -50%) scale(1);
+  }
+
+  .iframe-container {
+    flex: 1;
+    position: relative;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  iframe.loaded {
+    opacity: 1;
+    transform: scale(1);
   }
 </style>
 </head>
@@ -87,22 +179,53 @@
 
   <aside>
     <div class="sidebar-top">
-      <i class="fa-solid fa-house" title="Home" onclick="loadPage('home')"></i>
-      <i class="fa-solid fa-gamepad" title="Games" onclick="loadPage('games')"></i>
-      <i class="fa-solid fa-box-archive" title="Apps" onclick="loadPage('apps')"></i>
-      <i class="fa-solid fa-magnifying-glass" title="Search" onclick="loadPage('search')"></i>
-      <i class="fa-solid fa-gear" title="Settings" onclick="loadPage('settings')"></i>
-      <i class="fa-solid fa-plus" title="Extras" onclick="loadPage('extras')"></i>
+      <div class="nav-item active" data-tooltip="Home" onclick="loadPage('home', this)">
+        <i class="fa-solid fa-house"></i>
+      </div>
+      <div class="nav-item" data-tooltip="Games" onclick="loadPage('games', this)">
+        <i class="fa-solid fa-gamepad"></i>
+      </div>
+      <div class="nav-item" data-tooltip="Apps" onclick="loadPage('apps', this)">
+        <i class="fa-solid fa-box-archive"></i>
+      </div>
+      <div class="nav-item" data-tooltip="Search" onclick="loadPage('search', this)">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <div class="nav-item" data-tooltip="Settings" onclick="loadPage('settings', this)">
+        <i class="fa-solid fa-gear"></i>
+      </div>
+      <div class="nav-item" data-tooltip="Extras" onclick="loadPage('extras', this)">
+        <i class="fa-solid fa-plus"></i>
+      </div>
     </div>
 
     <div class="sidebar-bottom">
-      <i class="fa-brands fa-discord" title="Discord" onclick="window.open('https://dsc.gg/dominum/', '_blank')"></i>
+      <div class="nav-item" data-tooltip="Discord" onclick="window.open('https://dsc.gg/dominum/', '_blank')">
+        <i class="fa-brands fa-discord"></i>
+      </div>
     </div>
   </aside>
 
-  <iframe id="content-frame" src="/src/assets/pages/home.html"></iframe>
+  <div class="iframe-container">
+    <iframe id="content-frame" src="./src/assets/pages/home.html"></iframe>
+  </div>
 
 <script>
+    function injectBaseTag(doc) {
+        if (!doc) return;
+        try {
+            if (!doc.querySelector('base')) {
+                const base = doc.createElement('base');
+                let basePath = window.location.pathname;
+                if (!basePath.endsWith('/')) {
+                    basePath = basePath.substring(0, basePath.lastIndexOf('/') + 1);
+                }
+                base.href = window.location.origin + basePath;
+                doc.head.insertBefore(base, doc.head.firstChild);
+            }
+        } catch(e) {}
+    }
+
     function getCookie(name) {
         const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
         return match ? decodeURIComponent(match[2]) : null;
@@ -114,17 +237,29 @@
         document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
     }
 
-    function loadPage(page) {
+    function loadPage(page, element) {
+        if(element) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
         const frame = document.getElementById("content-frame");
-        frame.style.opacity = 0;
+        frame.classList.remove("loaded"); 
         
         setTimeout(() => {
-            frame.src = `/src/assets/pages/${page}.html`;
+            frame.src = `./src/assets/pages/${page}.html`;
             frame.onload = () => {
-                frame.style.opacity = 1;
+                injectBaseTag(frame.contentWindow.document);
+                frame.classList.add("loaded"); 
                 loadTheme(); 
             };
-        }, 300);
+        }, 400); 
+    }
+
+    document.getElementById("content-frame").onload = function() {
+        injectBaseTag(this.contentWindow.document);
+        this.classList.add("loaded");
+        loadTheme();
     }
 
     const currentUrl = window.location.href;
@@ -171,12 +306,12 @@
                     themeToApply = { ...themes.default, ...custom }; 
                 }
             } catch (e) {
-                console.error("Failed to parse custom theme", e);
                 themeToApply = themes['default'];
             }
         }
         applyTheme(themeToApply);
     }
+
     (function() {
         const cloakData = getCookie("dominum-cloak");
         if (cloakData) {
@@ -189,7 +324,7 @@
                     link.href = icon;
                     document.head.appendChild(link);
                 }
-            } catch (e) { console.warn("Invalid cloak data:", e); }
+            } catch (e) {}
         }
 
         document.addEventListener("keydown", e => {
@@ -200,6 +335,7 @@
             }
         });
     })();
+
     function exportSettings() {
         try {
             const settingsData = {
@@ -221,7 +357,6 @@
             URL.revokeObjectURL(url);
 
         } catch (error) {
-            console.error("Error exporting settings:", error);
             alert("Failed to export settings.");
         }
     }
@@ -255,10 +390,10 @@
             window.location.reload();
 
         } catch (error) {
-            console.error("Error importing settings:", error);
             alert("Failed to import settings. The file may be corrupt or invalid.");
         }
     }
+
     loadTheme();
 </script>
 </body>
